@@ -39,10 +39,10 @@ const mediaArticlesData = [
   },
   // Add other images you see in public/media/ for the marquee. For example:
   {
-    imageName: "mahashrunkala.png",
+    imageName: "mahashrunkhala.png",
     articleLink: "https://example.com/mahashrunkala-article",
     title: "Mahashrunkala Feature",
-  },
+  }, 
   {
     imageName: "newsarticle.jpg",
     articleLink: "https://example.com/newsarticle",

@@ -4,7 +4,7 @@ import path from "path";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { projects } from "@/data/projects";
+import { projects } from "../../../../data/projects";
 
 export async function generateStaticParams() {
   // Build { slug, section } combos so Next can statically render them

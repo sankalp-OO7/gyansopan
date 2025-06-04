@@ -1,5 +1,5 @@
 // src/app/projects/[slug]/page.jsx
-import { projects } from "@/data/projects";
+import { projects } from "../../../data/projects";
 import { redirect } from "next/navigation";
 
 export function generateStaticParams() {
