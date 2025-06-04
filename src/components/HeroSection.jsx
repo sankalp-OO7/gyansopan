@@ -201,7 +201,10 @@ export default function HeroSection() {
       });
     }
   };
-
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   return (
     <motion.section
       ref={containerRef}
@@ -321,12 +324,14 @@ export default function HeroSection() {
               whileTap={{ scale: 0.95 }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    onClick={() => scrollToSection("projects")}
+                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               />
               <span className="relative z-10">Explore Projects</span>
             </motion.button>
 
             <motion.button
+              onClick={()=>scrollToSection("tools-approach")}
               className="px-6 py-3 border-2 border-slate-600 text-slate-300 text-sm sm:text-base font-semibold rounded-lg hover:bg-slate-800 transition-all duration-300"
               whileHover={!isMobile ? { 
                 scale: 1.05,
