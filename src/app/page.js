@@ -105,7 +105,7 @@ export default function Home() {
   return (
     <>
       {/* Initial Loading Overlay */}
-      {/* <AnimatePresence>
+      <AnimatePresence>
         {isLoading && (
           <motion.div
             className="fixed inset-0 bg-gray-900 flex items-center justify-center z-[9999]"
@@ -132,7 +132,7 @@ export default function Home() {
             </motion.span>
           </motion.div>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>  
 
       {/* Main Content Wrapper (fades in after loading) */}
       <motion.div
