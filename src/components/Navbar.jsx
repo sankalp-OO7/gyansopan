@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMediaQuery } from "@mui/material";
+import dynamic from "next/dynamic";
 
 // --- Nav items ---
 const navItems = [
@@ -17,8 +17,10 @@ const navItems = [
 
 // --- Utility: Smooth scroll ---
 function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (typeof window !== 'undefined') {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 // --- Per-letter gradient logo ---
@@ -37,15 +39,18 @@ const navbarVariants = {
   initial: { y: -80, opacity: 0, filter: "blur(10px)" },
   animate: { y: 0, opacity: 1, filter: "blur(0px)", transition: { type: "spring", stiffness: 60, damping: 14, mass: 1.3 } }
 };
+
 const navItemVariants = {
   initial: { scale: 1, rotateX: 0, rotateY: 0, z: 0 },
   hover: { scale: 1.09, rotateX: 10, rotateY: -8, z: 14, boxShadow: "0 8px 32px rgba(80,130,255,0.15)", transition: { type: "spring", stiffness: 250, damping: 16 } },
   tap: { scale: 0.97 }
 };
+
 const underlineVariants = {
   initial: { scaleX: 0 },
   animate: { scaleX: 1, transition: { type: 'spring', stiffness: 320, damping: 20 } }
 };
+
 const logoLetterVariants = {
   hidden: { y: -20, opacity: 0, scale: 0.8 },
   visible: i => ({
@@ -59,60 +64,123 @@ const logoLetterVariants = {
 const getParticleMotionProps = (i) => ({
   initial: { y: -32, opacity: 0.2, scale: 0.5, x: 0 },
   animate: {
-    y: [0, 16, -10, 8, 0], opacity: [0.23, 0.47, 0.55, 0.47, 0.23], scale: [0.7, 1, 1.1, 0.9, 0.7], x: [0, 8, -12, 10, 0],
+    y: [0, 16, -10, 8, 0], 
+    opacity: [0.23, 0.47, 0.55, 0.47, 0.23], 
+    scale: [0.7, 1, 1.1, 0.9, 0.7], 
+    x: [0, 8, -12, 10, 0],
     transition: {
-      duration: 6 + (i % 6), repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: (i * 0.14) % 2
+      duration: 6 + (i % 6), 
+      repeat: Infinity, 
+      repeatType: "reverse", 
+      ease: "easeInOut", 
+      delay: (i * 0.14) % 2
     }
   }
 });
 
+// Particles component that only renders on client
+const Particles = ({ isDesktop }) => {
+  const [particles, setParticles] = useState([]);
+  
+  useEffect(() => {
+    // Generate particles only on client side
+    const generatedParticles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+      id: i,
+      width: 10 + (i * 7) % 24,
+      height: 10 + (i * 5) % 24,
+      left: (i * 13) % 100,
+      top: (i * 17) % 30 - 15,
+    }));
+    setParticles(generatedParticles);
+  }, []);
+
+  if (!isDesktop || particles.length === 0) return null;
+
+  return (
+    <div className="fixed top-0 left-0 w-full h-24 z-40 pointer-events-none overflow-hidden">
+      {particles.map((particle, i) => (
+        <motion.div
+          key={particle.id}
+          {...getParticleMotionProps(i)}
+          className={`absolute rounded-full ${PARTICLE_COLORS[i % PARTICLE_COLORS.length]}`}
+          style={{
+            width: `${particle.width}px`,
+            height: `${particle.height}px`,
+            left: `${particle.left}%`,
+            top: `${particle.top}px`,
+            filter: 'blur(3px)',
+            zIndex: 0
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // --- Component ---
-export default function Navbar() {
+function NavbarComponent() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const observerRef = useRef(null);
-  const isDesktop = useMediaQuery('(min-width:1024px)');
+
+  // Handle mounting and responsive behavior
+  useEffect(() => {
+    setMounted(true);
+    
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Active section logic
   useEffect(() => {
+    if (!mounted) return;
+    
     const options = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
     const callback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) setActiveSection(entry.target.id);
       });
     };
+    
     observerRef.current = new IntersectionObserver(callback, options);
     const sections = ['hero', ...navItems.map(item => item.to)]
       .map(id => document.getElementById(id)).filter(Boolean);
     sections.forEach(sec => observerRef.current?.observe(sec));
+    
     return () => {
-      sections.forEach(sec => observerRef.current?.unobserve(sec));
-      observerRef.current?.disconnect();
+      if (observerRef.current) {
+        sections.forEach(sec => observerRef.current?.unobserve(sec));
+        observerRef.current.disconnect();
+      }
     };
-  }, []);
+  }, [mounted]);
+
+  // Don't render interactive elements until mounted
+  if (!mounted) {
+    return (
+      <nav className="fixed top-0 z-50 w-full backdrop-blur-2xl bg-white/70 dark:bg-gray-900/80 shadow-2xl">
+        <div className="mx-auto flex items-center justify-between px-8 py-4 max-w-7xl relative z-10">
+          <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl">
+            {logo}
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <>
       {/* Floating animated particles (Desktop only for perf) */}
-      {isDesktop && (
-        <div className="fixed top-0 left-0 w-full h-24 z-40 pointer-events-none overflow-hidden">
-          {[...Array(PARTICLE_COUNT)].map((_, i) => (
-            <motion.div
-              key={i}
-              {...getParticleMotionProps(i)}
-              className={`absolute rounded-full ${PARTICLE_COLORS[i % PARTICLE_COLORS.length]}`}
-              style={{
-                width: `${10 + Math.random() * 24}px`,
-                height: `${10 + Math.random() * 24}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 30 - 15}px`,
-                filter: 'blur(3px)',
-                zIndex: 0
-              }}
-            />
-          ))}
-        </div>
-      )}
+      <Particles isDesktop={isDesktop} />
+      
       {/* Main Navbar */}
       <motion.nav
         variants={navbarVariants}
@@ -124,7 +192,7 @@ export default function Navbar() {
           {/* LOGO: Per-letter animation, gradient, hover */}
           <motion.button
             onClick={() => scrollToSection('hero')}
-            className={`text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl relative`}
+            className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl relative"
             aria-label="Scroll to Home section"
             whileTap={{ scale: 0.98 }}
             style={{ letterSpacing: '0.08em' }}
@@ -158,10 +226,11 @@ export default function Navbar() {
               />
             )}
           </motion.button>
+          
           {/* Desktop Navigation */}
           {isDesktop && (
             <ul className="flex gap-2 ml-4">
-              {navItems.map(({ label, to }, i) => (
+              {navItems.map(({ label, to }) => (
                 <motion.li
                   key={to}
                   variants={navItemVariants}
@@ -198,6 +267,7 @@ export default function Navbar() {
               ))}
             </ul>
           )}
+          
           {/* Hamburger (Mobile) */}
           {!isDesktop && (
             <motion.button
@@ -206,7 +276,6 @@ export default function Navbar() {
               className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-200 focus:outline-none"
               aria-label="Open navigation menu"
             >
-              {/* Hamburger Icon */}
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                   d="M4 6h16M4 12h16M4 18h16" />
@@ -215,6 +284,7 @@ export default function Navbar() {
           )}
         </div>
       </motion.nav>
+      
       {/* Mobile Drawer */}
       <AnimatePresence>
         {isDrawerOpen && !isDesktop && (
@@ -224,7 +294,6 @@ export default function Navbar() {
             exit={{ x: "100vw", opacity: 0, transition: { type: "spring", stiffness: 110, damping: 20 } }}
             className="fixed inset-0 z-[100] bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl flex flex-col items-center justify-center"
           >
-            {/* Close Button */}
             <motion.button
               onClick={() => setIsDrawerOpen(false)}
               whileTap={{ scale: 0.96 }}
@@ -237,7 +306,7 @@ export default function Navbar() {
               </svg>
             </motion.button>
             <ul className="flex flex-col gap-4 text-center">
-              {navItems.map(({ label, to }, i) => (
+              {navItems.map(({ label, to }) => (
                 <motion.li
                   key={to}
                   variants={navItemVariants}
@@ -269,3 +338,19 @@ export default function Navbar() {
     </>
   );
 }
+
+// Export as dynamic component with SSR disabled
+const Navbar = dynamic(() => Promise.resolve(NavbarComponent), {
+  ssr: false,
+  loading: () => (
+    <nav className="fixed top-0 z-50 w-full backdrop-blur-2xl bg-white/70 dark:bg-gray-900/80 shadow-2xl">
+      <div className="mx-auto flex items-center justify-between px-8 py-4 max-w-7xl relative z-10">
+        <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl">
+          CHAINWORKS
+        </div>
+      </div>
+    </nav>
+  )
+});
+
+export default Navbar;

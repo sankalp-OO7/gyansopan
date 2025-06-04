@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// Existing component imports (as requested)
+// Existing component imports
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
@@ -82,31 +82,48 @@ const logoVariants = {
 };
 
 export default function Home() {
+  // Always initialize isLoading to true for both server and client.
+  // The client-side check will happen in useEffect.
   const [isLoading, setIsLoading] = useState(true);
+  // This new state tracks if the animation has definitively played in this session.
+  const [animationPlayedThisSession, setAnimationPlayedThisSession] = useState(false);
 
   useEffect(() => {
-    // Disable scrolling when the component mounts and loading is active
+    // This code runs only on the client side after initial render (hydration)
+    const hasAnimatedPreviously = sessionStorage.getItem('hasAnimated');
+
+    if (hasAnimatedPreviously) {
+      // If animation has played before, immediately set loading to false
+      // and ensure scrolling is enabled.
+      setIsLoading(false);
+      setAnimationPlayedThisSession(true); // Mark that it has played
+      document.body.style.overflow = 'unset';
+      return; // Exit early, no need for timer
+    }
+
+    // If it's the first time in this session, disable scrolling and start the timer
     document.body.style.overflow = 'hidden';
 
-    // Simulate a loading time before content becomes visible
     const timer = setTimeout(() => {
       setIsLoading(false);
-      // Re-enable scrolling after the loading screen fades out
-      document.body.style.overflow = 'unset'; // 'unset' or 'auto'
-    }, 2000); // Adjust this duration as needed (e.g., based on actual data fetching)
+      setAnimationPlayedThisSession(true); // Mark that animation has now played
+      sessionStorage.setItem('hasAnimated', 'true'); // Store this in session storage
+      document.body.style.overflow = 'unset'; // Re-enable scrolling
+    }, 2000); // Adjust this duration as needed
 
-    // Cleanup function to ensure scrolling is re-enabled if the component unmounts prematurely
+    // Cleanup function to ensure scrolling is re-enabled if component unmounts
     return () => {
       clearTimeout(timer);
       document.body.style.overflow = 'unset';
     };
-  }, []); // Empty dependency array means this runs once on mount
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
     <>
       {/* Initial Loading Overlay */}
+      {/* Show overlay only if isLoading is true AND the animation hasn't played this session yet */}
       <AnimatePresence>
-        {isLoading && (
+        {isLoading && !animationPlayedThisSession && (
           <motion.div
             className="fixed inset-0 bg-gray-900 flex items-center justify-center z-[9999]"
             variants={loadingOverlayVariants}
@@ -132,23 +149,28 @@ export default function Home() {
             </motion.span>
           </motion.div>
         )}
-      </AnimatePresence>  
+      </AnimatePresence>
 
-      {/* Main Content Wrapper (fades in after loading) */}
+      {/* Main Content Wrapper */}
       <motion.div
-        variants={contentFadeIn}
-        initial="hidden"
-        animate={isLoading ? "hidden" : "visible"} // Only animate to visible when loading is done
-        className="min-h-screen" // Ensure enough height for content
+        // Initial state for content: if animationPlayedThisSession is true (meaning loading is skipped),
+        // or if isLoading becomes false, the content is visible. Otherwise, it starts hidden.
+        initial={isLoading || !animationPlayedThisSession ? "hidden" : "visible"}
+        // Animate content to visible when isLoading becomes false OR if animation has already played
+        animate={!isLoading || animationPlayedThisSession ? "visible" : "hidden"}
+        // Apply transition only if it's the first time content is becoming visible after a real load
+        transition={!isLoading && !animationPlayedThisSession ? contentFadeIn.visible.transition : { duration: 0 }}
+        className="min-h-screen"
       >
         <Navbar />
         <main>
+          {/* Section animations: Only apply delays/transitions if the initial loading animation occurred */}
           <motion.section
             id="hero"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.1 }} // Staggered delay for each section
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.1 } : { duration: 0 }}
           >
             <HeroSection />
           </motion.section>
@@ -156,27 +178,27 @@ export default function Home() {
           <motion.section
             id="about-us"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.2 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.2 } : { duration: 0 }}
           >
             <AboutUs />
           </motion.section>
           <motion.section
             id="why-choose-us"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.8 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.8 } : { duration: 0 }}
           >
             <WhyChooseUs />
           </motion.section>
           <motion.section
             id="projects"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.3 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.3 } : { duration: 0 }}
           >
             <Projects />
           </motion.section>
@@ -184,9 +206,9 @@ export default function Home() {
           <motion.section
             id="tools-approach"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.4 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.4 } : { duration: 0 }}
           >
             <ToolsApproach />
           </motion.section>
@@ -194,9 +216,9 @@ export default function Home() {
           <motion.section
             id="team"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.5 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.5 } : { duration: 0 }}
           >
             <Team />
           </motion.section>
@@ -204,9 +226,9 @@ export default function Home() {
           <motion.section
             id="awards"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.6 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.6 } : { duration: 0 }}
           >
             <Awards />
           </motion.section>
@@ -214,9 +236,9 @@ export default function Home() {
           <motion.section
             id="career"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.7 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.7 } : { duration: 0 }}
           >
             <Career />
           </motion.section>
@@ -224,17 +246,15 @@ export default function Home() {
           <motion.section
             id="contact-us"
             variants={sectionSlideIn}
-            initial="hidden"
-            animate={isLoading ? "hidden" : "visible"}
-            transition={{ delay: 0.8 }}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.8 } : { duration: 0 }}
           >
             <ContactUs />
-
           </motion.section>
-    
         </main>
         <Footer />
       </motion.div>
     </>
-  )
+  );
 }
