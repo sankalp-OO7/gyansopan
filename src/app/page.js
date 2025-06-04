@@ -160,7 +160,8 @@ export default function Home() {
         animate={!isLoading || animationPlayedThisSession ? "visible" : "hidden"}
         // Apply transition only if it's the first time content is becoming visible after a real load
         transition={!isLoading && !animationPlayedThisSession ? contentFadeIn.visible.transition : { duration: 0 }}
-        className="min-h-screen"
+        // FIX: Removed the explicit background color from here
+        className="min-h-screen text-gray-100" // Removed bg-gray-900 dark:bg-black
       >
         <Navbar />
         <main>
