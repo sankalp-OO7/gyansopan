@@ -120,22 +120,20 @@ const ContactUs = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSending, setIsSending] = useState(false); // To disable button during submission
 
-  const GETFORM_ENDPOINT = "https://getform.io/f/cd6330ca-c449-4ae2-8982-2bb955ae030e"; // Your Getform.io endpoint
+  // Update this to your new API route
+  const API_ENDPOINT = "/api/send-email"; // Relative path to your API route
 
   const submitForm = async (formData) => {
     try {
-      const rawResponse = await fetch(GETFORM_ENDPOINT, {
+      const rawResponse = await fetch(API_ENDPOINT, {
         method: "POST",
-        mode: "cors",
-        credentials: "omit",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      console.log("ContactUs Form: Data sent to Getform.io:", formData);
-      console.log("ContactUs Form: Getform.io response status:", rawResponse.status, rawResponse.statusText);
+      const data = await rawResponse.json();
+      console.log("ContactUs Form: API response:", data);
       return rawResponse.ok;
     } catch (err) {
       console.error("ContactUs Form: Network or submission error:", err);
@@ -156,8 +154,6 @@ const ContactUs = () => {
       setMessage("");
       setShowSuccessModal(true); // Open the success modal
     } else {
-      // Using a custom modal/message box is preferable over alert()
-      // For now, keeping alert() as per the original component's behavior.
       alert("Failed to send message. Please try again.");
     }
   };

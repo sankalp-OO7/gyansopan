@@ -55,30 +55,27 @@ export default function DemoForm({ projectName }) {
   const [isSending, setIsSending] = useState(false); // To manage button disabled state
   const [showSuccessModal, setShowSuccessModal] = useState(false); // For the modal popup
 
-  // --- IMPORTANT: This is the Getform.io endpoint you're using for ContactUs ---
-  // Ensure this URL is correct and shared if you intend both forms to go to the same place.
-  const GETFORM_ENDPOINT = "https://getform.io/f/cd6330ca-c449-4ae2-8982-2bb955ae030e";
+  // --- IMPORTANT: Update this to your Next.js API route ---
+  const API_ENDPOINT = "/api/send-email";
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const submitToGetForm = async (data) => {
+  const submitToApi = async (data) => {
     try {
-      const rawResponse = await fetch(GETFORM_ENDPOINT, {
+      const rawResponse = await fetch(API_ENDPOINT, {
         method: "POST",
-        mode: "cors",
-        credentials: "omit",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
-      // Console logs for debugging and verification
-      console.log("DemoForm: Data prepared for Getform.io:", data);
-      console.log("DemoForm: Getform.io response status:", rawResponse.status, rawResponse.statusText);
+      const responseData = await rawResponse.json(); // Parse the JSON response
+      console.log("DemoForm: Data sent to API:", data);
+      console.log("DemoForm: API response status:", rawResponse.status, rawResponse.statusText);
+      console.log("DemoForm: API response body:", responseData); // Log the response body
 
       return rawResponse.ok; // Returns true for success (2xx status), false otherwise
     } catch (err) {
@@ -92,22 +89,23 @@ export default function DemoForm({ projectName }) {
     setIsSending(true); // Disable button during submission
 
     // Construct the combined message from mobile, project name, and user's message
+    // This will be sent as the 'message' field to your API route
     const combinedMessage = `
 --- Demo Request Details ---
-Project: ${projectName}
+Project: ${projectName || 'N/A'}
 Mobile: ${formData.mobile}
 --- User Message ---
 ${formData.message}
-`.trim(); // .trim() removes leading/trailing whitespace
+`.trim();
 
-    // Prepare the payload for Getform.io (expecting name, email, message)
-    const payloadForGetForm = {
+    // Prepare the payload for your API route (expecting name, email, message)
+    const payloadForApi = {
       name: formData.name,
       email: formData.email,
       message: combinedMessage, // This sends the combined information
     };
 
-    const success = await submitToGetForm(payloadForGetForm);
+    const success = await submitToApi(payloadForApi);
     setIsSending(false); // Re-enable button
 
     if (success) {

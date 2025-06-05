@@ -102,11 +102,7 @@ const mediaArticlesData = [
     title:
       "ODEX LAUNCHES THE FIRST BLOCKCHAIN BASED EKYC PLATFORM IN THE INDIAN SHIPPING INDUSTRY",
   },
-  {
-    imageName: "mahashrunkala.png",
-    articleLink: "https://example.com/mahashrunkala-article",
-    title: "Mahashrunkala Feature",
-  },
+ 
   {
     imageName: "newsarticle.jpg",
     articleLink: "https://example.com/newsarticle",

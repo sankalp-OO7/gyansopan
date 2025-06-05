@@ -64,10 +64,10 @@ const accordionContentVariants = {
 const jobOpenings = [
   {
     id: '1',
-    title: 'Senior Blockchain Developer',
-    location: 'Remote (India)',
+    title: 'Blockchain Developer',
+    location: 'Pune (India)',
     type: 'Full-time',
-    workMode: 'Remote', // New field for work type flexibility
+    workMode: 'Work from office', // New field for work type flexibility
     description: `We are seeking a highly skilled Senior Blockchain Developer with expertise in smart contract development, decentralized applications (dApps), and blockchain protocols. You will be responsible for designing, developing, and deploying robust and secure blockchain solutions.`,
     requirements: [
       '2+ years of experience in blockchain development (Solidity, Rust, Go)', // Updated for 2+ years
@@ -87,7 +87,7 @@ const jobOpenings = [
   },
   {
     id: '2',
-    title: 'Frontend Developer (React/Next.js)',
+    title: 'MERN Stack Developer',
     location: 'Pune, India', // Changed location
     type: 'Full-time',
     workMode: 'In-office / Hybrid (On discussion)', // New field for work type flexibility
@@ -109,51 +109,31 @@ const jobOpenings = [
     ],
   },
   {
-    id: '3',
-    title: 'Blockchain Security Engineer',
+    id: '4',
+    title: 'Python Developer',
     location: 'Remote',
     type: 'Full-time',
-    workMode: 'Remote', // New field for work type flexibility
-    description: `We are looking for a Blockchain Security Engineer to ensure the integrity and security of our blockchain platforms and smart contracts. You will perform security audits, vulnerability assessments, and implement robust security measures.`,
+    workMode: 'Remote',
+    description: `We are looking for a Python Developer who is skilled at writing efficient, scalable, and reliable code. You will collaborate on developing backend solutions and maintaining existing Python-based applications.`,
     requirements: [
-      '0-5years in cybersecurity, with focus on blockchain/smart contract security', // Updated for 0-X years
-      'Experience with security auditing tools (Slither, Mythril, Truffle Security)',
-      'Knowledge of common smart contract vulnerabilities (reentrancy, overflow, etc.)',
-      'Understanding of blockchain consensus mechanisms and network security',
-      'Certifications like CEH, OSCP, or similar are a plus',
-      'Relevant experience: Both experienced professionals and passionate freshers with relevant coursework/projects are welcome.'
+      '0-5 years experience with Python development',
+      'Proficiency with web frameworks like Django or Flask',
+      'Experience in building RESTful APIs',
+      'Familiarity with relational databases (PostgreSQL, MySQL) and NoSQL databases (MongoDB)',
+      'Knowledge of front-end technologies (JavaScript, HTML, CSS) is beneficial',
+      'Understanding of version control systems (Git)',
+      'Strong problem-solving skills and attention to detail',
     ],
     responsibilities: [
-      'Conduct security audits and penetration testing of smart contracts and dApps',
-      'Develop and implement security best practices and protocols',
-      'Monitor blockchain networks for suspicious activities',
-      'Respond to security incidents and provide remediation strategies',
-      'Stay updated with the latest security threats and vulnerabilities in the blockchain space',
+      'Write clean, maintainable, and efficient Python code',
+      'Develop backend components to improve responsiveness and overall performance',
+      'Integrate user-facing elements developed by front-end developers with server-side logic',
+      'Design and implement robust, scalable APIs',
+      'Troubleshoot, debug, and optimize existing systems',
+      'Collaborate closely with cross-functional teams to ensure timely delivery of projects',
     ],
   },
-  {
-    id: '4',
-    title: 'Product Manager (Web3)',
-    location: 'Pune, India', // Changed location
-    type: 'Full-time',
-    workMode: 'In-office / Hybrid (On discussion)', // New field for work type flexibility
-    description: `As a Product Manager, you will drive the strategy, roadmap, and execution for our innovative Web3 products. You will bridge the gap between business, technology, and design to deliver exceptional user experiences.`,
-    requirements: [
-      '0-3 years in product management, with 2+ years in Web3/blockchain', // Updated for 0-X years
-      'Deep understanding of blockchain technology, DeFi, NFTs, DAOs',
-      'Proven track record of launching successful products',
-      'Excellent communication, leadership, and analytical skills',
-      'Ability to define product vision, strategy, and roadmap',
-      'Relevant experience: Both experienced product managers and highly motivated freshers with strong Web3 knowledge are encouraged to apply.'
-    ],
-    responsibilities: [
-      'Define and articulate the product vision, strategy, and roadmap',
-      'Conduct market research and competitive analysis',
-      'Gather and prioritize product requirements from stakeholders',
-      'Work closely with engineering, design, and marketing teams',
-      'Oversee the product lifecycle from concept to launch and iteration',
-    ],
-  },
+ 
   {
     id: '5', // New job ID
     title: 'Blockchain/Web Development Intern',
