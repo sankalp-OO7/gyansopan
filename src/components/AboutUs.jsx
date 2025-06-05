@@ -399,7 +399,7 @@ export default function AboutUs() {
               transition={{ delay: 0.4 }}
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 leading-relaxed"
             >
-              {splitParagraphIntoAnimatedWords("With over 15 years of collective expertise in product research, development, and implementation, we are committed to guiding our clients from ideation to execution, helping them thrive in a rapidly evolving digital economy.")}
+              {splitParagraphIntoAnimatedWords("With over 5+ years of collective expertise in product research, development, and implementation, we are committed to guiding our clients from ideation to execution, helping them thrive in a rapidly evolving digital economy.")}
             </motion.p>
           </motion.div>
         </motion.div>

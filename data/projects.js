@@ -41,7 +41,7 @@ export const projects = [
   },
   {
     slug: "fort-tourism-app",
-    name: "Fort & Tourism Management Mobile App",
+    name: "Fort & Tourism Management Mobile App + Website ",
     client: "Forest and Revenue Dept",
     image: "/projects/fort-tourism-app/details.png",
     excerpt:
