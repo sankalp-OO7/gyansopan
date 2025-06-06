@@ -1,7 +1,7 @@
 export const projects = [
   {
     slug: "ayudaan",
-    name: "Ayudaan",
+    name: "MAHAAYUDAAN",
     client: "Govt. of Maharashtra",
     image: "/projects/ayudaan/details.png",
     excerpt:
@@ -51,7 +51,7 @@ export const projects = [
   },
   {
     slug: "smart-geofencing-attendance",
-    name: "Smart Geofencing Attendance App",
+    name: "Smart Geofencing Attendance App [PAVO]",
     client: "Forest and Revenue Dept",
     image: "/projects/smart-geofencing-attendance/details.png",
     excerpt:
@@ -83,6 +83,16 @@ export const projects = [
     slug: "maha-gr",
     name: "Maha-GR",
     client: "Government",
+    image: "/projects/maha-gr/details.png",
+    excerpt:
+      "An AI-powered government regulation software for real-time compliance and monitoring.",
+    demoUrl: "/projects/maha-gr/request-demo",
+        sections: ["details", "features", "gallery"],
+  },
+  {
+    slug: "maha-bhatkanti",
+    name: "Maha-Bhatkanti",
+    client: "Forest Department - Maharashtra",
     image: "/projects/maha-gr/details.png",
     excerpt:
       "An AI-powered government regulation software for real-time compliance and monitoring.",

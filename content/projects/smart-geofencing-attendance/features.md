@@ -1,51 +1,102 @@
-<div style="text-align: justify;">
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>1. Tamper-proof Organ Ecosystem.</strong> Blockchain-based audit trails ensure that every transaction—whether donor registration, hospital approval, or transplant event—is permanently recorded and fully verifiable, eliminating any possibility of tampering.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>2. Streamlined On-boarding for All Stakeholders.</strong> Simplified registration workflows allow hospitals, surgeons, donors, and recipients to join the system quickly, using role-based access controls and QR-code verification to minimize friction and reduce manual paperwork.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>3. Real-time Transparency on Waiting Lists.</strong> Dynamic, auditable dashboards display actual queue positions, expected wait times, and allocation statuses, empowering patients and hospitals with live insights into where they stand in the transplant process.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>4. Automated Donor–Recipient Matching & Allocation.</strong> An on-chain matching engine leverages verifiable credentials to identify compatible donors and recipients, drastically reducing manual errors, accelerating match times, and improving overall transplant outcomes.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>5. Secure, Official Communication Channel.</strong> End-to-end encrypted messaging connects transplant coordinators, specialist physicians, and regulatory bodies—eliminating unofficial back-channels and safeguarding sensitive medical data from leaks.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>6. Elimination of Redundant Data Entry.</strong> A shared on-chain registry synchronizes hospital records, donor profiles, and transplant logs across all institutions, preventing data duplication and ensuring consistency across every participating facility.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>7. Blockchain-Generated QR Codes for Tracking.</strong> Unique, tamper-resistant QR codes link donor/recipient profiles, hospital records, and transplant documentation in a single identifier, making it easy to trace each organ through every step of the process.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>8. Modular Specialist Management.</strong> Dedicated interfaces for surgeons, anesthesiologists, nephrologists, and nursing staff let each specialist update case progress, upload medical reports, and coordinate schedules seamlessly within a unified platform.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>9. Transparent Transplant Tracking & Audit.</strong> The full chain of custody—from organ harvesting to final transplantation—is recorded on-chain, ensuring regulatory compliance, enabling real-time auditability, and facilitating post-operative reviews.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>10. Inter-Institutional Coordination (Private/Public).</strong> Federated access controls enable private hospitals and government health departments to share transplant data securely while preserving patient confidentiality and reducing bureaucratic delays.
-</div>
-
-<div style="border-left: 4px solid #333; padding-left: 12px; margin-bottom: 24px;">
-<strong>11. Scalable Architecture (80+ Hospitals).</strong> Deployed across Maharashtra, the Quorum-based platform is designed to scale horizontally—supporting new use cases (e.g., specialist referrals or public health reporting) with minimal configuration and zero downtime.
-</div>
-
-<p style="text-align: center; font-size: 0.9em; color: #555;">
-© 2025, CHAINWORKS DIGITAL PRIVATE LIMITED
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 10px auto; padding: 20px; background-color: #ffffff; border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 24px; max-width: 900px; width: calc(100% - 20px); box-sizing: border-box; overflow: hidden; position: relative;">
+<style>
+@media (max-width: 768px) {
+div[style*="max-width: 900px"] {
+padding: 15px !important;
+width: calc(100% - 10px) !important;
+margin: 5px auto !important;
+}
+h1[style*="font-size: 2.8em"] {
+font-size: 1.8em !important;
+margin-top: 20px !important;
+margin-bottom: 20px !important;
+padding-bottom: 10px !important;
+}
+h2[style*="font-size: 2em"] {
+font-size: 1.5em !important;
+margin-top: 30px !important;
+margin-bottom: 15px !important;
+padding-bottom: 10px !important;
+}
+h3[style*="font-size: 1.5em"] {
+font-size: 1.2em !important;
+margin-bottom: 10px !important;
+}
+div[style*="font-size: 1.1em"], div[style*="font-size: 1.05em"], div[style*="font-size: 1.0em"] {
+font-size: 0.95em !important;
+padding: 15px !important;
+}
+p, ul, li {
+font-size: 0.95em !important;
+line-height: 1.5 !important;
+}
+ul[style*="list-style: none"] li {
+padding-left: 20px !important;
+}
+ul[style*="list-style: none"] li span {
+font-size: 1em !important;
+}
+}
+</style>
+<div style="position: absolute; top: 0; left: 0; width: 100%; height: 8px; background-color: #1a73e8; border-top-left-radius: 12px; border-top-right-radius: 12px;"></div>
+<h1 style="font-size: 2.8em; text-align: center; margin-top: 30px; margin-bottom: 30px; color: #1a73e8; border-bottom: 3px solid #1a73e8; padding-bottom: 20px; display: block; width: fit-content; margin-left: auto; margin-right: auto; font-weight: 700; letter-spacing: -0.8px;">
+<span style="vertical-align: middle; font-size: 0.9em; margin-right: 10px;">🚀</span> Key Features of Pavo AI Attendance System <span style="vertical-align: middle; font-size: 0.9em; margin-left: 10px;">🚀</span>
+</h1>
+<div style="font-size: 1.1em; text-align: justify; margin-bottom: 30px; background-color: #e3f2fd; padding: 20px; border-left: 8px solid #4285f4; border-radius: 8px; box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 8px;">
+<p style="margin-bottom: 0.8em; font-weight: 600; color: #1a237e;">
+Pavo AI Attendance System offers a suite of advanced features designed to streamline and secure workforce attendance management.
 </p>
+</div>
 
+<h2 style="font-size: 2em; color: #1a73e8; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: 600;">
+<span style="font-size: 1.2em; vertical-align: middle; margin-right: 8px;">🏢</span> Branch Management
+</h2>
+<div style="font-size: 1.05em; text-align: justify; margin-bottom: 30px; padding-left: 15px; border-left: 4px solid #34a853; background-color: #e6f7ea; border-radius: 8px; padding: 20px;">
+<p style="margin-bottom: 0;">
+Centralized oversight for managing multiple office or site locations, enabling tailored access control, real-time monitoring, and performance tracking across branches.
+</p>
+</div>
+
+<h2 style="font-size: 2em; color: #1a73e8; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: 600;">
+<span style="font-size: 1.2em; vertical-align: middle; margin-right: 8px;">👤</span> AI-Powered Face Recognition
+</h2>
+<div style="font-size: 1.05em; text-align: justify; margin-bottom: 30px; padding-left: 15px; border-left: 4px solid #34a853; background-color: #e6f7ea; border-radius: 8px; padding: 20px;">
+<p style="margin-bottom: 0;">
+Secure and accurate attendance logging using advanced facial recognition technology, reducing manual errors and eliminating buddy punching.
+</p>
+</div>
+
+<h2 style="font-size: 2em; color: #1a73e8; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: 600;">
+<span style="font-size: 1.2em; vertical-align: middle; margin-right: 8px;">📍</span> Geo-Fencing
+</h2>
+<div style="font-size: 1.05em; text-align: justify; margin-bottom: 30px; padding-left: 15px; border-left: 4px solid #34a853; background-color: #e6f7ea; border-radius: 8px; padding: 20px;">
+<p style="margin-bottom: 0;">
+Location-based attendance verification ensures that employees can only clock in or out within designated geographical boundaries, enhancing attendance authenticity.
+</p>
+</div>
+
+<h2 style="font-size: 2em; color: #1a73e8; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: 600;">
+<span style="font-size: 1.2em; vertical-align: middle; margin-right: 8px;">📊</span> Comprehensive Reporting
+</h2>
+<div style="font-size: 1.05em; text-align: justify; margin-bottom: 30px; padding-left: 15px; border-left: 4px solid #34a853; background-color: #e6f7ea; border-radius: 8px; padding: 20px;">
+<p style="margin-bottom: 0;">
+Automatically generated reports provide insights into attendance trends, absenteeism, late entries, and workforce productivity, aiding HR compliance and strategic planning.
+</p>
+</div>
+
+<h2 style="font-size: 2em; color: #1a73e8; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: 600;">
+<span style="font-size: 1.2em; vertical-align: middle; margin-right: 8px;">⚙️</span> User Management
+</h2>
+<div style="font-size: 1.05em; text-align: justify; margin-bottom: 30px; padding-left: 15px; border-left: 4px solid #34a853; background-color: #e6f7ea; border-radius: 8px; padding: 20px;">
+<p style="margin-bottom: 0;">
+Robust user role and permission settings allow administrators to manage employee profiles, access levels, and departmental structures, ensuring secure and organized system usage.
+</p>
+</div>
+
+<p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee;">
+Learn more at: <a href="http://aipavo.com/" style="color: #1a73e8; text-decoration: none; font-weight: 600;">aipavo.com</a>
+</p>
+<p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+© 2025, Pavo AI
+</p>
 </div>

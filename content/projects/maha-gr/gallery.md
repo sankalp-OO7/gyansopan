@@ -16,5 +16,7 @@ grid-template-columns: repeat(2, 1fr);
 <div class="erp-gallery">
 <img src="/projects/maha-gr/details.png" alt="Details Screen" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; height: auto; display: block; object-fit: cover;" />
 <img src="/projects/maha-gr/details1.png" alt="Details 1 Screen" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; height: auto; display: block; object-fit: cover;" />
+<img src="/projects/maha-gr/d3.png" alt="Details 1 Screen" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; height: auto; display: block; object-fit: cover;" />
+<img src="/projects/maha-gr/d2.png" alt="Details 1 Screen" style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); width: 100%; height: auto; display: block; object-fit: cover;" />
 </div>
 </div>
