@@ -143,7 +143,7 @@ export default function Home() {
               animate="animate"
               exit="exit"
             >
-              CHAINWORKS
+              GYANSOPAN
             </motion.span>
           </motion.div>
         )}
