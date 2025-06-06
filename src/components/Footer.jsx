@@ -1,32 +1,30 @@
-'use client'; // This component uses Framer Motion, so it needs to be a client component
+"use client"; // This component uses Framer Motion, so it needs to be a client component
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 
 // --- Framer Motion Variants ---
 
-// Variants for the overall footer section
 const footerVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: 'easeOut',
+      duration: 0.6,
+      ease: "easeOut",
     },
   },
 };
 
-// Variants for the sun-like semicircle animation
 const semicircleVariants = {
   hidden: { scale: 0, opacity: 0, rotate: 0 },
   visible: {
     scale: 1,
-    opacity: 1,
-    rotate: 360, // Full rotation
+    opacity: 0.3,
+    rotate: 360,
     transition: {
-      duration: 25, // Long duration for subtle continuous animation
+      duration: 20,
       ease: "linear",
       repeat: Infinity,
       repeatType: "loop",
@@ -34,108 +32,131 @@ const semicircleVariants = {
   },
 };
 
-// Variants for the copyright text animation
 const copyrightVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
+  hidden: { opacity: 0, y: 5 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.1 } },
 };
 
-// Variants for the logo/icon animation
 const logoVariants = {
-  hidden: { opacity: 0, y: -20, scale: 0.8 },
+  hidden: { opacity: 0, y: -10, scale: 0.9 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring", // Bouncy effect
-      stiffness: 120,
-      damping: 15,
+      type: "spring",
+      stiffness: 100,
+      damping: 12,
     },
   },
   pulse: {
-    scale: [1, 1.05, 1], // Subtle pulse effect
-    opacity: [1, 0.9, 1],
+    scale: [1, 1.03, 1],
+    opacity: [1, 0.95, 1],
     transition: {
-      duration: 2,
+      duration: 1.5,
       repeat: Infinity,
       ease: "easeInOut",
-      delay: 1.5, // Start pulsing after initial animation
+      delay: 1,
     },
   },
 };
 
-
-// --- Footer Component ---
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <motion.footer
-      // Changed background to a consistent black theme with subtle dark gray gradient
-      className="relative w-full py-8 md:py-12 bg-gradient-to-br from-black via-gray-950 to-black text-white shadow-2xl mt-0 overflow-hidden"
+      className="
+        relative
+        w-full
+        py-6 sm:py-8
+        bg-gradient-to-r
+          from-gray-900
+          via-blue-900
+          to-gray-900
+        text-white
+        overflow-hidden
+        border-t border-gray-800
+      "
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.2 }}
       variants={footerVariants}
     >
-      {/* Sun-like Semicircle Effect - Adjusted for a more subtle glow on this darker background */}
+      {/* Sun-like Semicircle Glow */}
       <motion.div
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[180vw] h-[90vw] md:w-[140vw] md:h-[70vw] /* Even larger */
-                   rounded-t-full bg-gradient-to-t from-blue-400/10 to-purple-600/0 dark:from-blue-600/5 dark:to-purple-800/0 /* Softer blue/purple glow */
-                   filter blur-3xl opacity-40 z-0 /* Reduced opacity and blur for subtlety */
-                   animate-pulse-slow" /* Added a subtle pulse animation */
+        className="
+          absolute
+          bottom-0
+          left-1/2
+          transform -translate-x-1/2
+          w-[150vw]
+          h-[75vw]
+          md:w-[120vw]
+          md:h-[60vw]
+          rounded-t-full
+          bg-gradient-to-t
+            from-blue-500/20
+            via-purple-500/10
+            to-transparent
+          filter
+          blur-2xl
+          z-0
+        "
         variants={semicircleVariants}
         initial="hidden"
         animate="visible"
         style={{
-          borderTopLeftRadius: '50% 100%',
-          borderTopRightRadius: '50% 100%',
-          transformOrigin: 'bottom center',
+          transformOrigin: "bottom center",
         }}
       />
 
-      {/* Subtle Background Grid Pattern - Reduced opacity for more subtlety on dark background */}
+      {/* Subtle Grid Overlay */}
       <div
-        className="absolute inset-0 z-0 opacity-2" /* Further reduced opacity for extreme subtlety */
+        className="absolute inset-0 z-0 opacity-5"
         style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)', // Lighter grid for dark background
-          backgroundSize: '20px 20px',
-          backgroundBlendMode: 'overlay',
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), " +
+            "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+          backgroundBlendMode: "overlay",
         }}
       />
 
-      {/* Content Wrapper */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center">
-        {/* Logo/Icon Section - Changed background to a blue/white gradient for contrast */}
-        <motion.div
-          className="mb-8 p-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center" /* Blue gradient for logo background */
-          variants={logoVariants}
-          initial="hidden"
-          animate={["visible", "pulse"]} /* Play both initial and pulse animations */
-        >
-          {/* Favicon for logo */}
-          <img
-            src="/favicon.ico" // Using favicon.ico as requested
-            alt="Chainworks Logo"
-            className="w-12 h-12 rounded-full" // Ensure favicon is rounded and sized appropriately
-          />
-        </motion.div>
-
-        {/* Copyright Text - Changed to white for high contrast */}
-        <motion.span className="text-white text-lg md:text-xl font-semibold tracking-wide" variants={copyrightVariants}>
-          © {currentYear} Chainworks. All rights reserved.
-        </motion.span>
-
-        {/* Subtle Separator Line - Changed to a vibrant blue for effect */}
-        <motion.div
-          className="w-32 h-1.5 bg-blue-400 rounded-full mt-6 mb-4 shadow-md" /* Using a vibrant blue for the line */
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
-        />
-
-        {/* Tagline/Mission Statement - Removed as requested */}
+      {/* Footer Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-center sm:justify-between flex-col sm:flex-row">
+        {/* Logo/Icon and Copyright */}
+        <div className="flex items-center mb-4 sm:mb-0">
+          <motion.div
+            className="
+              mr-3
+              p-3
+              rounded-md
+              bg-gradient-to-br
+                from-purple-600
+                to-blue-700
+              shadow-md
+              flex
+              items-center
+              justify-center
+            "
+            variants={logoVariants}
+            initial="hidden"
+            animate={["visible", "pulse"]}
+          >
+            <img
+              src="/favicon.ico"
+              alt="GyanSopan Logo"
+              className="w-8 h-8 rounded-md"
+            />
+          </motion.div>
+          <motion.span
+            className="text-sm sm:text-base font-medium tracking-wide"
+            variants={copyrightVariants}
+          >
+            © {currentYear} GyanSopan. All rights reserved.
+          </motion.span>
+        </div>
       </div>
     </motion.footer>
   );

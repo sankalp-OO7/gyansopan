@@ -1,441 +1,291 @@
-"use client"; // Added for client-side rendering compatibility if using Next.js App Router
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaLinkedin } from 'react-icons/fa'; // LinkedIn icon from react-icons/fa
+"use client";
 
-// Placeholder image if a team member's image fails to load
-// Ensure you have a placeholder image at this path or adjust accordingly.
-const PLACEHOLDER_IMAGE = '/team/placeholder-person.png'; // Assuming a placeholder image exists in public/team/
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
-// Base path for images as per your file structure
-const IMAGE_BASE_PATH = '/team/'; 
+// --- Reusable Utility Component (copied for context) ---
+// In a real project, this would ideally be imported from a shared components directory.
 
-// --- Data for Founders ---
-const foundersData = [
-  {
-    name: "Jitendra Franciss Sadangi",
-    position: "CEO",
-    experiences: ["M.Sc Mathematics IIT Bombay"],
-    imageName: "jitendra.jpg", // Only store the image file name
-    linkedinUrl: "https://in.linkedin.com/in/jitendra-franciss-sadangi-045154a3",
-  },
-  {
-    name: "Chandrakant Juluri",
-    position: "CTO",
-    experiences: ["MCA - VIT Pune"],
-    imageName: "chandrakant.jpeg", 
-    linkedinUrl: "https://www.linkedin.com/in/ketanbhokray",
-  },
-  {
-    name: "Tejasharee Gaidhani",
-    position: "COO",
-    experiences: ["M.Sc Mathematics Pune University"],
-    imageName: "tejashree.jpg", 
-    linkedinUrl: "https://in.linkedin.com/in/tejashree-makarand-gaidhani-048a18196",
-  },
-  {
-    name: "Sayali Chinchansure",
-    position: "CMO",
-    experiences: ["MPM Pune University"],
-    imageName: "sayli.png", 
-    linkedinUrl: "https://in.linkedin.com/in/tejashree-makarand-gaidhani-048a18196", 
-  },
-];
+// Animated text component for letter-by-letter animation
+const AnimatedText = ({ text, className, delay = 0 }) => {
+  const letters = text.split("");
 
-// --- Data for Team Members ---
-const teamMembersData = [
-  { name: "Uttara Sawant", imageName: "uttara.jpeg", linkedinUrl: "http://www.linkedin.com/in/uttaradsawant" },
-  { name: "Purushottam Samleti", imageName: "purushotam.jpeg", linkedinUrl: "http://www.linkedin.com/in/purushottamsamleti" },
-  { name: "Balu Gayake", imageName: "baluGayake.jpeg", linkedinUrl: "https://www.linkedin.com/in/balu-gayake/" },
-  { name: "Premchand Sandangi", imageName: "premchand.jpeg", linkedinUrl: "https://www.linkedin.com/in/premchand-sandangi-0b0b3b1b4" },
-  { name: "Prasad Patil", imageName: "prasadPatil.jpeg", linkedinUrl: "https://www.linkedin.com/in/imprasadpatil/" },
-  { name: "Harikrishna Boomen", imageName: "harikrishna.jpg", linkedinUrl: "https://www.linkedin.com/in/harikrishnabomen" },
-  { name: "Siddharth Chandekar", imageName: "sidhart.jpeg", linkedinUrl: "https://www.linkedin.com/in/siddharth-chandekar-0b0b3b1b4" },
-  { name: "Sankalp Racchewar", imageName: "Sankalp.jpeg", linkedinUrl: "https://www.linkedin.com/in/sankalp-racchewar-440ba5293" },
-  { name: "Snehal kathale", imageName: "snehal.jpeg", linkedinUrl: "https://www.linkedin.com/in/snehal-kathale-5662b4271" },
-  { name: "Karan Dabhi", imageName: "karan.jpeg", linkedinUrl: "https://www.linkedin.com/in/karan-dabhi-308b12253" },
-  { name: "Tanvi Indalkar", imageName: "tanvi.jpeg", linkedinUrl: "http://www.linkedin.com/in/tanvi-indalkar" },
-  { name: "Pooja Rathi", imageName: "pooja.jpg", linkedinUrl: "https://www.linkedin.com/in/pooja-rathi-036248269?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
-  { name: "Unnati Bansod", imageName: "unnati.jpeg", linkedinUrl: "https://www.linkedin.com/in/unnati-bansod-5b2236297" },
-  { name: "Akshi Chandola", imageName: "akshi.jpeg", linkedinUrl: "https://www.linkedin.com/in/akshi-chandola-a8a968210?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" }
-];
-
-// --- Shared Framer Motion Variants ---
-const sectionVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 80,
-      damping: 12,
-      duration: 0.5,
-    },
-  },
-};
-
-const card3DVariants = {
-  initial: {
-    rotateY: 0,
-    rotateX: 0,
-    scale: 1,
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)", // Consistent shadow
-    y: 0,
-  },
-  hover: {
-    scale: 1.05,
-    rotateY: [0, 5, -5, 0], // Subtle 3D rotation
-    rotateX: [0, -5, 5, 0],
-    y: -5, // Slight lift
-    boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)", // More prominent shadow
-    transition: {
-      duration: 0.4,
-      ease: "easeOut",
-      yoyo: Infinity, // For a continuous subtle hover effect
-      boxShadow: { duration: 0.2 },
-    },
-  },
-};
-
-const text3DVariants = {
-  initial: {
-    textShadow: "1px 1px 2px rgba(0,0,0,0.2)", // Subtle initial shadow
-    y: 0,
-  },
-  animate: { // For constant subtle animation on text
-    textShadow: [
-      "1px 1px 2px rgba(0,0,0,0.2)",
-      "2px 2px 4px rgba(0,0,0,0.3)",
-      "1px 1px 2px rgba(0,0,0,0.2)",
-    ],
-    y: [0, -2, 0], // Slight bounce
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
-  hover: { // For a more pronounced effect on hover
-    textShadow: "3px 3px 6px rgba(0,0,0,0.4)",
-    y: -3,
-    transition: {
-      duration: 0.2,
-      ease: "easeOut",
-    },
-  }
-};
-
-const pulseEffect = {
-  initial: { scale: 1 },
-  animate: {
-    scale: [1, 1.02, 1], // Gentle pulse
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
-};
-
-// --- Motion Graphics: Floating Bubbles (Adjusted for visibility) ---
-const bubbleVariants = {
-  initial: (i) => ({
-    opacity: 0,
-    scale: 0,
-    x: Math.random() * (window.innerWidth || 1000),
-    y: (window.innerHeight || 1000) + Math.random() * 50,
-    filter: `blur(${Math.random() * 2}px)`, // Slightly more blur
-  }),
-  animate: (i) => ({
-    opacity: [0.1 + Math.random() * 0.1, 0.2 + Math.random() * 0.15, 0.1 + Math.random() * 0.1], // Increased opacity
-    scale: [0.2 + Math.random() * 0.2, 0.6 + Math.random() * 0.4, 0.2 + Math.random() * 0.2], // Increased scale
-    y: -50,
-    x: `+=${Math.random() * 200 - 100}`, // Subtle horizontal drift
-    transition: {
-      duration: 8 + Math.random() * 10, // Slower movement
-      ease: "linear",
-      repeat: Infinity,
-      delay: Math.random() * 5,
-    },
-  }),
-};
-
-const numberOfBubbles = 60; // Significantly more bubbles
-const bubbleColors = [
-  "rgba(100, 180, 255, 0.15)", // Light blue with higher opacity
-  "rgba(150, 255, 150, 0.15)", // Light green with higher opacity
-  "rgba(255, 150, 150, 0.15)", // Light red with higher opacity
-  "rgba(255, 255, 100, 0.15)", // Light yellow with higher opacity
-];
-const bubbleShadowColors = [
-  "rgba(100, 180, 255, 0.3)",
-  "rgba(150, 255, 150, 0.3)",
-];
-
-// --- Founder Card Component (Tailwind & Framer Motion) ---
-const FounderCard = ({ name, position, experiences, imageName, linkedinUrl }) => {
-  const imagePath = `${IMAGE_BASE_PATH}${imageName}`; // Construct full image path
-  const [imgSrc, setImgSrc] = useState(imagePath);
-  const [imageError, setImageError] = useState(false);
-
-  const handleImageError = () => {
-    setImgSrc(PLACEHOLDER_IMAGE);
-    setImageError(true);
+  const container = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.04, delayChildren: delay },
+    }),
   };
 
-  return (
-    <motion.div
-      className="rounded-xl shadow-lg overflow-hidden bg-white/80 backdrop-blur-sm group cursor-pointer border border-blue-100 flex flex-col h-full perspective-1000" // Glassmorphism effect, subtle border
-      variants={card3DVariants}
-      initial="initial"
-      whileHover="hover"
-      viewport={{ once: true, amount: 0.3 }}
-    >
-      {/* Image Container with Overlay */}
-      <div className="relative h-64 overflow-hidden bg-blue-50 flex-shrink-0"> {/* Light blue background for image container */}
-        <motion.div variants={pulseEffect} initial="initial" animate="animate" className="w-full h-full">
-            {imageError ? (
-            <div className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-400 text-center p-4">
-                <span className="text-sm font-semibold">{name} <br/> (Image Failed to Load)</span>
-            </div>
-            ) : (
-            <img
-                src={imgSrc}
-                alt={name}
-                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                onError={handleImageError}
-            />
-            )}
-        </motion.div>
-        
-        {/* Overlay for Linkedin Icon */}
-        <motion.div
-          className="absolute inset-0 bg-blue-600/70 flex items-center justify-center" // Slightly darker blue overlay for contrast
-          variants={{
-            initial: { opacity: 0 },
-            hover: { opacity: 1, transition: { duration: 0.3 } }
-          }}
-          initial="initial"
-          animate="initial" // Keep initial state until hovered
-          whileHover="hover"
-        >
-          <a
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white hover:text-blue-300 transition-colors" // Lighter hover color
-            aria-label={`LinkedIn profile of ${name}`}
-          >
-            <FaLinkedin size={40} /> 
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Content */}
-      <div className="p-4 text-center bg-white/90 flex-grow"> {/* Slightly transparent background */}
-        <h3 className="text-xl font-semibold text-gray-800">{name}</h3>
-        <p className="text-blue-800 font-bold text-sm mb-2">{position}</p> {/* Darker blue for prominence */}
-        <div className="space-y-1">
-          {experiences.map((exp, i) => (
-            <p key={i} className="text-gray-700 text-xs">{exp}</p>  
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-// --- Team Member Card Component (Tailwind & Framer Motion) ---
-const TeamMemberCard = ({ name, imageName, linkedinUrl }) => {
-  const imagePath = `${IMAGE_BASE_PATH}${imageName}`; // Construct full image path
-  const [imgSrc, setImgSrc] = useState(imagePath);
-  const [imageError, setImageError] = useState(false);
-
-  const handleImageError = () => {
-    setImgSrc(PLACEHOLDER_IMAGE);
-    setImageError(true);
-  };
-
-  // A slightly different variant for team members for subtle distinction
-  const teamCardVariants = {
-    initial: {
-      rotateY: 0,
-      rotateX: 0,
-      scale: 1,
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.08)",
-    },
-    hover: {
-      scale: 1.05, // Slight increase
-      rotateY: [0, 3, -3, 0],
-      rotateX: [0, -3, 3, 0],
-      boxShadow: "0 10px 20px rgba(0, 0, 0, 0.15)",
+  const child = {
+    visible: {
+      opacity: 1,
+      y: 0,
       transition: {
-        duration: 0.3,
-        ease: "easeOut",
-        yoyo: Infinity,
+        type: "spring",
+        damping: 7,
+        stiffness: 140,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: {
+        type: "spring",
+        damping: 7,
+        stiffness: 140,
       },
     },
   };
 
   return (
     <motion.div
-      className="rounded-xl shadow-md overflow-hidden group cursor-pointer flex flex-col h-full bg-white/80 backdrop-blur-sm border border-blue-100 perspective-1000" // Consistent light background/border
-      variants={teamCardVariants}
-      initial="initial"
-      whileHover="hover"
-      viewport={{ once: true, amount: 0.3 }}
+      className={`${className} text-wrap`} // Ensures words don't split, and lines are balanced
+      variants={container}
+      initial="hidden"
+      animate="visible"
     >
-      <div className="relative h-48 overflow-hidden bg-blue-50 flex-shrink-0">
-        <motion.div variants={pulseEffect} initial="initial" animate="animate" className="w-full h-full">
-            {imageError ? (
-            <div className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-400 text-center p-4">
-                <span className="text-sm font-semibold">{name} <br/> (Image Failed to Load)</span>
-            </div>
-            ) : (
-            <img
-                src={imgSrc}
-                alt={name}
-                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                onError={handleImageError}
-            />
-            )}
-        </motion.div>
-      </div>
-      
-      <div className={`p-3 flex items-center justify-center text-gray-800 text-center flex-grow bg-blue-500/10`}> {/* Soft blue transparent background */}
-        <span className="font-semibold text-lg leading-tight">{name}</span>
-        {linkedinUrl && (
-          <a
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-2 text-blue-700 hover:text-blue-500 transition-colors"
-            aria-label={`LinkedIn profile of ${name}`}
-          >
-            <FaLinkedin size={20} />
-          </a>
-        )}
-      </div>
+      {letters.map((letter, index) => (
+        <motion.span
+          variants={child}
+          key={index}
+          className="inline-block"
+          whileHover={{
+            scale: 1.5,
+            color: "#ff77a9",
+            textShadow: "0 0 12px rgba(255, 119, 169, 0.8)",
+            transition: { duration: 0.1 },
+          }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
     </motion.div>
   );
 };
 
-// --- Main Team Component (Tailwind & Framer Motion) ---
-export default function Team() {
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
+// --- New Components for this Section's Visuals ---
+
+const FloatingDecorativeElement = ({ content, className, delay = 0, duration = 5 }) => (
+  <motion.div
+    className={`${className} absolute text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500 opacity-60 filter blur-[1.5px] pointer-events-none`}
+    initial={{ opacity: 0, y: 0, scale: 0.8 }}
+    animate={{
+      opacity: [0.6, 0.9, 0.6],
+      y: [0, -20, 0],
+      scale: [0.9, 1.1, 0.9],
+      rotate: [0, 5, -5, 0]
+    }}
+    transition={{
+      delay,
+      duration: duration + Math.random() * 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+    }}
+  >
+    {content}
+  </motion.div>
+);
+
+const RotatedSquare = ({ className, delay = 0, duration = 4 }) => (
+  <motion.div
+    className={`${className} w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-300 to-purple-400 opacity-70 transform rotate-45 blur-sm`}
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: [1, 1.1, 1], rotate: [45, 60, 45] }}
+    transition={{ delay, duration, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
+// --- Main Contact Us Section Component ---
+
+export default function ContactUsSection() {
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-150px" });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-
-      const handleResize = () => {
-        setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-      };
-
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  const handleMouseMove = (e) => {
+    if (isMobile || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePosition({
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    });
+  };
 
   return (
     <motion.section
-      id="our-team"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-      variants={sectionVariants}
-      // White light gradient background
-      className="relative w-full px-6 py-12 max-w-7xl mx-auto my-16 overflow-hidden min-h-screen
-                 bg-gradient-to-br from-white via-gray-50 to-blue-50" // Adjusted gradient for a soft, light feel
+      ref={containerRef}
+      id="contact-us"
+      className="relative flex flex-col items-center justify-center min-h-screen gap-12 px-4 sm:px-10 py-16 sm:py-28 lg:py-32 overflow-hidden"
+      onMouseMove={handleMouseMove}
+      style={{
+        background: isMobile
+          ? `linear-gradient(135deg, #e3f2fd 0%, #ffe0f6 50%, #e0f7fa 100%)`
+          : `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
+              rgba(173, 216, 230, 0.5) 0%,   /* Light Blue */
+              rgba(255, 192, 203, 0.5) 20%, /* Light Pink */
+              rgba(144, 238, 144, 0.5) 40%,  /* Light Green */
+              transparent 70%),
+              linear-gradient(135deg, 
+              #f0f8ff 0%, /* Alice Blue */
+              #fdf5e6 25%, /* Old Lace */
+              #ffe4e1 50%, /* Misty Rose */
+              #e0f7fa 100%)`, // Light Cyan
+      }}
     >
-      {/* Animated Bubbles (Motion Graphics) - Render only if window dimensions are available */}
-      {windowDimensions.width > 0 && (
-        <div className="absolute inset-0 z-0 pointer-events-none"> {/* z-0 for background */}
-          {Array.from({ length: numberOfBubbles }).map((_, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={bubbleVariants}
-              initial="initial"
-              animate="animate"
-              className="absolute rounded-full"
-              style={{
-                width: `${10 + Math.random() * 20}px`,
-                height: `${10 + Math.random() * 20}px`,
-                backgroundColor: bubbleColors[Math.floor(Math.random() * bubbleColors.length)],
-                boxShadow: `0 0 ${15 + Math.random() * 25}px ${bubbleShadowColors[Math.floor(Math.random() * bubbleShadowColors.length)]}`,
-              }}
-            />
-          ))}
-        </div>
+      {/* Decorative Elements (hidden on mobile) */}
+      {!isMobile && (
+        <>
+          <FloatingDecorativeElement content="B" className="top-[10%] left-[10%]" delay={0.3} />
+          <RotatedSquare className="top-[15%] right-[15%]" delay={0.7} />
+          <FloatingDecorativeElement content="C" className="bottom-[20%] left-[8%]" delay={1.1} />
+          <FloatingDecorativeElement content="4" className="top-[25%] right-[5%]" delay={0.9} />
+          <FloatingDecorativeElement content="1" className="bottom-[10%] right-[10%]" delay={1.5} />
+        </>
       )}
 
-      {/* Content (Z-index ensures it's above bubbles) */}
-      <div className="relative z-10"> {/* z-10 to bring content above background particles */}
-        <motion.h2
-          className="text-4xl md:text-5xl font-extrabold text-center text-blue-800 mb-4 font-serif" // Darker blue for prominence
-          variants={itemVariants}
-          initial="initial"
-          animate="animate" // Apply constant text animation
-          whileHover="hover" // Apply hover text animation
+      {/* Main Content Container */}
+      <div className="flex flex-col w-full max-w-7xl mx-auto px-4 sm:px-10 z-10 text-center space-y-12 sm:space-y-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <motion.span variants={text3DVariants}>
-            Our Team
-          </motion.span>
-        </motion.h2>
-        <motion.p
-          className="text-lg text-center text-gray-700 mb-12 max-w-3xl mx-auto"
-          variants={itemVariants}
+          <AnimatedText
+            text="Want to learn more?"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-purple-600 mb-4"
+            delay={0.5}
+          />
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 drop-shadow-sm">GyanSopan</h2>
+          <p className="text-xl sm:text-2xl text-gray-800 font-semibold mt-4">Reach out!</p>
+        </motion.div>
+
+        {/* Contact Information */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl max-w-lg mx-auto border border-blue-200"
         >
-          The research and product development background of our team equips us to
-          better manage our projects.
-        </motion.p>
+          <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Contact Details</h3>
+          <div className="space-y-3 text-lg sm:text-xl font-medium text-gray-800">
+            <p>
+              Email:{" "}
+              <a
+                href="mailto:admin@gyansopan.com"
+                className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline"
+              >
+                admin@gyansopan.com
+              </a>
+            </p>
+            <p>
+              Email:{" "}
+              <a
+                href="mailto:admin@fenlei.in"
+                className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline"
+              >
+                admin@fenlei.in
+              </a>
+            </p>
+            <p>
+              Phone:{" "}
+              <a
+                href="tel:+919359022506"
+                className="text-blue-600 hover:text-blue-800 transition-colors duration-300 underline"
+              >
++91 97663 74620
+              </a>{" "}
+              (Ms. Uttara Sawant)
+            </p>
+          </div>
+        </motion.div>
 
-        {/* Founders Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-16">
-          {foundersData.map((founder, index) => (
-            <FounderCard
-              key={index}
-              name={founder.name}
-              position={founder.position}
-              experiences={founder.experiences}
-              imageName={founder.imageName} // Pass imageName instead of imagePath
-              linkedinUrl={founder.linkedinUrl}
-            />
-          ))}
-        </div>
+        {/* Links Section */}
+        <div className="flex flex-col lg:flex-row justify-center gap-6 sm:gap-8 max-w-5xl mx-auto w-full">
+          {/* Policy Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex-1 bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl border border-pink-200"
+          >
+            <h3 className="text-xl sm:text-2xl font-bold text-pink-700 mb-4">Important Information</h3>
+            <ul className="space-y-3 text-lg sm:text-xl font-medium text-gray-800">
+              <li>
+                <a
+                  href="https://app.gyansopan.com/termsAndConditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-600 hover:text-pink-800 transition-colors duration-300 underline"
+                >
+                  Terms of Use
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://app.gyansopan.com/dataPolicy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-600 hover:text-pink-800 transition-colors duration-300 underline"
+                >
+                  Data Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://app.gyansopan.com/privacyPolicy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-600 hover:text-pink-800 transition-colors duration-300 underline"
+                >
+                  Privacy Policy
+                </a>
+              </li>
+            </ul>
+          </motion.div>
 
-        <motion.p
-          className="text-lg text-center text-gray-700 mb-12 max-w-3xl mx-auto mt-16"
-          variants={itemVariants}
-        >
-          Our key employees whose efforts make it all possible
-        </motion.p>
-
-        {/* Team Members Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {teamMembersData.map((member, index) => (
-            <TeamMemberCard
-              key={index}
-              name={member.name}
-              imageName={member.imageName} // Pass imageName instead of imagePath
-              linkedinUrl={member.linkedinUrl}
-            />
-          ))}
+          {/* FAQs & Brochure */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.5 }}
+            className="flex-1 bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-xl border border-green-200"
+          >
+            <h3 className="text-xl sm:text-2xl font-bold text-green-700 mb-4">Additional Information</h3>
+            <ul className="space-y-3 text-lg sm:text-xl font-medium text-gray-800">
+              <li>
+                <a
+                  href="https://app.gyansopan.com/faqs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-600 hover:text-green-800 transition-colors duration-300 underline"
+                >
+                  FAQs
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://drive.google.com/file/d/1pV3gcLrCcG4gKjYVs3pgNw_RoBdyqUpX/view"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-600 hover:text-green-800 transition-colors duration-300 underline"
+                >
+                  GyanSopan Brochure
+                </a>
+              </li>
+            </ul>
+          </motion.div>
         </div>
       </div>
     </motion.section>

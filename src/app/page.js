@@ -11,9 +11,7 @@ import AboutUs from '@/components/AboutUs'
 import Projects from '@/components/Projects'
 import ToolsApproach from '@/components/ToolsApproach'
 import Team from '@/components/Team'
-import Awards from '@/components/Awards'
-import Career from '@/components/Career'
-import ContactUs from '@/components/ContactUs'
+ 
 import WhyChooseUs from '@/components/WhyChooseUs'
 
 // --- Animation Variants ---
@@ -223,36 +221,7 @@ export default function Home() {
           >
             <Team />
           </motion.section>
-
-          <motion.section
-            id="awards"
-            variants={sectionSlideIn}
-            initial={!animationPlayedThisSession ? "hidden" : "visible"}
-            animate="visible"
-            transition={!animationPlayedThisSession ? { delay: 0.6 } : { duration: 0 }}
-          >
-            <Awards />
-          </motion.section>
-
-          <motion.section
-            id="career"
-            variants={sectionSlideIn}
-            initial={!animationPlayedThisSession ? "hidden" : "visible"}
-            animate="visible"
-            transition={!animationPlayedThisSession ? { delay: 0.7 } : { duration: 0 }}
-          >
-            <Career />
-          </motion.section>
-
-          <motion.section
-            id="contact-us"
-            variants={sectionSlideIn}
-            initial={!animationPlayedThisSession ? "hidden" : "visible"}
-            animate="visible"
-            transition={!animationPlayedThisSession ? { delay: 0.8 } : { duration: 0 }}
-          >
-            <ContactUs />
-          </motion.section>
+ 
         </main>
         <Footer />
       </motion.div>

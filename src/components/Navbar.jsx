@@ -3,16 +3,16 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 
-// --- Nav items ---
+// --- Nav items (Original names maintained) ---
 const navItems = [
-  { label: 'About', to: 'about-us' },
-  { label: 'Why Us', to: 'why-choose-us' },
-  { label: 'Projects', to: 'projects' },
-  { label: 'Approach', to: 'tools-approach' },
-  { label: 'Team', to: 'team' },
-  { label: 'Awards', to: 'awards' },
-  { label: 'Career', to: 'career' },
-  { label: 'Contact', to: 'contact-us' },
+  { label: 'Use?', to: 'about-us' },
+  { label: 'Features', to: 'why-choose-us' },
+  { label: 'Trademark', to: 'projects' },
+  { label: 'About Us', to: 'tools-approach' },
+  { label: 'Contact', to: 'team' },
+  // { label: 'Awards', to: 'awards' },
+  // { label: 'Career', to: 'career' },
+  // { label: 'Contact', to: 'contact-us' },
 ];
 
 // --- Utility: Smooth scroll ---
@@ -24,56 +24,74 @@ function scrollToSection(id) {
 }
 
 // --- Per-letter gradient logo ---
-const logo = "CHAINWORKS";
+const logo = "GYANSOPAN"; // Maintained GYANSOPAN logo
 
 // --- Particle (floating circles) configuration ---
-const PARTICLE_COUNT = 18;
+const PARTICLE_COUNT = 35; // Increased particle count for more vibrancy!
 const PARTICLE_COLORS = [
-  "bg-blue-300/50 dark:bg-blue-700/40",
-  "bg-purple-300/40 dark:bg-purple-600/50",
-  "bg-cyan-200/60 dark:bg-cyan-600/50"
+  "bg-red-400/70",     // Bright Red
+  "bg-yellow-300/70",   // Sunny Yellow
+  "bg-green-400/70",    // Lively Green
+  "bg-blue-400/70",     // Ocean Blue
+  "bg-purple-400/70",   // Cheerful Purple
+  "bg-pink-400/70",     // Playful Pink
+  "bg-orange-400/70"    // Zesty Orange
 ];
 
 // --- Variants ---
 const navbarVariants = {
-  initial: { y: -80, opacity: 0, filter: "blur(10px)" },
-  animate: { y: 0, opacity: 1, filter: "blur(0px)", transition: { type: "spring", stiffness: 60, damping: 14, mass: 1.3 } }
+  initial: { y: -100, opacity: 0, filter: "blur(15px)" },
+  animate: { 
+    y: 0, 
+    opacity: 1, 
+    filter: "blur(0px)", 
+    transition: { type: "spring", stiffness: 80, damping: 18, mass: 1.5, delay: 0.1 } 
+  }
 };
 
 const navItemVariants = {
-  initial: { scale: 1, rotateX: 0, rotateY: 0, z: 0 },
-  hover: { scale: 1.09, rotateX: 10, rotateY: -8, z: 14, boxShadow: "0 8px 32px rgba(80,130,255,0.15)", transition: { type: "spring", stiffness: 250, damping: 16 } },
-  tap: { scale: 0.97 }
+  initial: { scale: 1, rotateX: 0, rotateY: 0, z: 0, translateY: 0 }, // Added translateY
+  hover: { 
+    scale: 1.12, // Slightly reduced scale for smaller size
+    rotateX: 10, 
+    rotateY: -8, 
+    z: 16, 
+    translateY: -3, // Subtle lift effect
+    boxShadow: "0 12px 48px rgba(255, 105, 180, 0.5), 0 0 20px rgba(255,255,255,0.9) inset", // More prominent shadow
+    transition: { type: "spring", stiffness: 280, damping: 18 } 
+  },
+  tap: { scale: 0.92 }
 };
 
 const underlineVariants = {
   initial: { scaleX: 0 },
-  animate: { scaleX: 1, transition: { type: 'spring', stiffness: 320, damping: 20 } }
+  animate: { scaleX: 1, transition: { type: 'spring', stiffness: 350, damping: 25 } }
 };
 
 const logoLetterVariants = {
-  hidden: { y: -20, opacity: 0, scale: 0.8 },
+  hidden: { y: -30, opacity: 0, scale: 0.7 },
   visible: i => ({
     y: 0, opacity: 1, scale: 1,
-    transition: { delay: i * 0.06, type: "spring", stiffness: 140, damping: 12 }
+    transition: { delay: i * 0.04, type: "spring", stiffness: 160, damping: 14 }
   }),
-  hover: { y: -8, color: "#3b82f6", scale: 1.1 }
+  hover: { y: -12, color: "#FFD700", scale: 1.15, rotate: '7deg' } // Increased y-lift and rotation
 };
 
 // --- Particle floating animation ---
 const getParticleMotionProps = (i) => ({
-  initial: { y: -32, opacity: 0.2, scale: 0.5, x: 0 },
+  initial: { y: -80, opacity: 0, scale: 0.1, x: 0, rotate: 0 },
   animate: {
-    y: [0, 16, -10, 8, 0], 
-    opacity: [0.23, 0.47, 0.55, 0.47, 0.23], 
-    scale: [0.7, 1, 1.1, 0.9, 0.7], 
-    x: [0, 8, -12, 10, 0],
+    y: [0, 30, -25, 20, 0], 
+    opacity: [0.4, 0.8, 0.9, 0.7, 0.4], 
+    scale: [0.5, 1.5, 1.8, 1.2, 0.5], 
+    x: [0, 25, -30, 28, 0], 
+    rotate: [0, 180, 360, 540, 720], 
     transition: {
-      duration: 6 + (i % 6), 
+      duration: 4 + (i % 8), 
       repeat: Infinity, 
       repeatType: "reverse", 
       ease: "easeInOut", 
-      delay: (i * 0.14) % 2
+      delay: (i * 0.06) % 4 
     }
   }
 });
@@ -83,13 +101,12 @@ const Particles = ({ isDesktop }) => {
   const [particles, setParticles] = useState([]);
   
   useEffect(() => {
-    // Generate particles only on client side
     const generatedParticles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
       id: i,
-      width: 10 + (i * 7) % 24,
-      height: 10 + (i * 5) % 24,
-      left: (i * 13) % 100,
-      top: (i * 17) % 30 - 15,
+      width: 20 + (i * 10) % 40, 
+      height: 20 + (i * 8) % 40,
+      left: (i * 17) % 100, 
+      top: (i * 23) % 50 - 25, 
     }));
     setParticles(generatedParticles);
   }, []);
@@ -97,7 +114,7 @@ const Particles = ({ isDesktop }) => {
   if (!isDesktop || particles.length === 0) return null;
 
   return (
-    <div className="fixed top-0 left-0 w-full h-24 z-40 pointer-events-none overflow-hidden">
+    <div className="fixed top-0 left-0 w-full h-20 z-40 pointer-events-none overflow-hidden"> {/* Reduced height */}
       {particles.map((particle, i) => (
         <motion.div
           key={particle.id}
@@ -108,7 +125,7 @@ const Particles = ({ isDesktop }) => {
             height: `${particle.height}px`,
             left: `${particle.left}%`,
             top: `${particle.top}px`,
-            filter: 'blur(3px)',
+            filter: 'blur(5px)',
             zIndex: 0
           }}
         />
@@ -125,36 +142,26 @@ function NavbarComponent() {
   const [isDesktop, setIsDesktop] = useState(false);
   const observerRef = useRef(null);
 
-  // Handle mounting and responsive behavior
   useEffect(() => {
     setMounted(true);
-    
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    
+    const handleResize = () => { setIsDesktop(window.innerWidth >= 1024); };
     handleResize();
     window.addEventListener('resize', handleResize);
-    
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Active section logic
   useEffect(() => {
     if (!mounted) return;
-    
     const options = { root: null, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
     const callback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) setActiveSection(entry.target.id);
       });
     };
-    
     observerRef.current = new IntersectionObserver(callback, options);
     const sections = ['hero', ...navItems.map(item => item.to)]
       .map(id => document.getElementById(id)).filter(Boolean);
     sections.forEach(sec => observerRef.current?.observe(sec));
-    
     return () => {
       if (observerRef.current) {
         sections.forEach(sec => observerRef.current?.unobserve(sec));
@@ -163,12 +170,11 @@ function NavbarComponent() {
     };
   }, [mounted]);
 
-  // Don't render interactive elements until mounted
   if (!mounted) {
     return (
-      <nav className="fixed top-0 z-50 w-full backdrop-blur-2xl bg-white/70 dark:bg-gray-900/80 shadow-2xl">
-        <div className="mx-auto flex items-center justify-between px-8 py-4 max-w-7xl relative z-10">
-          <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl">
+      <nav className="fixed top-0 z-50 w-full bg-gradient-to-r from-pink-200 via-yellow-200 to-blue-200 shadow-2xl">
+        <div className="mx-auto flex items-center justify-between px-8 py-3 max-w-7xl relative z-10">
+          <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 text-transparent bg-clip-text drop-shadow-xl">
             {logo}
           </div>
         </div>
@@ -178,31 +184,34 @@ function NavbarComponent() {
 
   return (
     <>
-      {/* Floating animated particles (Desktop only for perf) */}
       <Particles isDesktop={isDesktop} />
       
-      {/* Main Navbar */}
       <motion.nav
         variants={navbarVariants}
         initial="initial"
         animate="animate"
-        className="fixed top-0 z-50 w-full backdrop-blur-2xl bg-white/70 dark:bg-gray-900/80 shadow-2xl"
+        className="fixed top-0 z-50 w-full 
+                   bg-gradient-to-br from-pink-200/90 via-yellow-200/90 to-blue-200/90 /* Slightly more opaque */
+                   shadow-2xl shadow-blue-400/50 
+                   border-b-4 border-yellow-400"
       >
-        <div className="mx-auto flex items-center justify-between px-8 py-4 max-w-7xl relative z-10">
-          {/* LOGO: Per-letter animation, gradient, hover */}
+        <div className="mx-auto flex items-center justify-between px-8 py-3 max-w-7xl relative z-10"> {/* Reduced padding */}
+          {/* LOGO */}
           <motion.button
             onClick={() => scrollToSection('hero')}
-            className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl relative"
+            className="text-3xl font-black tracking-wider /* Reduced font size */
+                       bg-gradient-to-r from-red-500 via-yellow-500 to-lime-500 text-transparent bg-clip-text 
+                       drop-shadow-lg relative cursor-pointer"
             aria-label="Scroll to Home section"
-            whileTap={{ scale: 0.98 }}
-            style={{ letterSpacing: '0.08em' }}
+            whileTap={{ scale: 0.95 }}
+            style={{ letterSpacing: '0.12em', fontFamily: 'Fredoka, sans-serif' }}
           >
             <motion.span
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              transition={{ staggerChildren: 0.04 }}
-              className="inline-block"
+              transition={{ staggerChildren: 0.03 }}
+              className="inline-block whitespace-nowrap" 
             >
               {[...logo].map((char, i) => (
                 <motion.span
@@ -215,21 +224,20 @@ function NavbarComponent() {
                 </motion.span>
               ))}
             </motion.span>
-            {/* Underline animation for CHAINWORKS when 'hero' is active */}
             {activeSection === 'hero' && (
               <motion.div
-                layoutId="underline"
+                layoutId="underline-gyansopan"
                 variants={underlineVariants}
                 initial="initial"
                 animate="animate"
-                className="h-1.5 rounded bg-gradient-to-r from-blue-400 via-blue-600 to-indigo-400 mt-1"
+                className="h-2 rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 mt-2 transform -skew-x-12"
               />
             )}
           </motion.button>
           
           {/* Desktop Navigation */}
           {isDesktop && (
-            <ul className="flex gap-2 ml-4">
+            <ul className="flex gap-2 ml-4"> {/* Slightly reduced gap */}
               {navItems.map(({ label, to }) => (
                 <motion.li
                   key={to}
@@ -237,29 +245,31 @@ function NavbarComponent() {
                   initial="initial"
                   whileHover="hover"
                   whileTap="tap"
-                  className="flex flex-col items-center"
+                  className="flex flex-col items-center group"
                 >
                   <motion.button
                     onClick={() => scrollToSection(to)}
                     className={`
-                      px-5 py-2 rounded-2xl font-semibold relative transition-all duration-150 bg-white/60 dark:bg-gray-900/60 shadow-lg
+                      px-5 py-2 text-base font-extrabold rounded-full relative transition-all duration-200 /* Reduced padding and font size */
+                      bg-white/80 
+                      shadow-md border-2
+                      whitespace-nowrap 
                       ${activeSection === to
-                        ? "text-blue-700 dark:text-blue-300 bg-white/90 dark:bg-gray-700/80 font-bold"
-                        : "text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-200"}
+                        ? "text-blue-700 bg-yellow-300/90 border-blue-500 font-black scale-105"
+                        : "text-gray-700 border-transparent group-hover:border-pink-400 group-hover:text-pink-600"}
                     `}
                     style={{
-                      border: activeSection === to ? "1.2px solid #4f90f7" : "1.2px solid transparent"
+                      fontFamily: 'Bubblegum Sans, cursive'
                     }}
                   >
                     {label}
-                    {/* Animated underline for the active nav item */}
                     {activeSection === to && (
                       <motion.div
-                        layoutId="nav-underline"
-                        className="absolute left-2 right-2 -bottom-1 h-[3px] rounded-full bg-gradient-to-r from-blue-400 via-blue-600 to-indigo-400"
+                        layoutId="nav-underline-active"
+                        className="absolute left-1 right-1 -bottom-1 h-[4px] rounded-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-400"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 25 }}
                       />
                     )}
                   </motion.button>
@@ -273,11 +283,12 @@ function NavbarComponent() {
             <motion.button
               onClick={() => setIsDrawerOpen(true)}
               whileTap={{ scale: 0.95 }}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-200 focus:outline-none"
+              className="p-2 text-gray-700 hover:text-red-500 focus:outline-none 
+                         bg-white/80 rounded-full shadow-lg border border-transparent hover:border-red-400"
               aria-label="Open navigation menu"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"> {/* Slightly smaller icon */}
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"
                   d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </motion.button>
@@ -289,23 +300,26 @@ function NavbarComponent() {
       <AnimatePresence>
         {isDrawerOpen && !isDesktop && (
           <motion.div
-            initial={{ x: "100vw", opacity: 0 }}
-            animate={{ x: 0, opacity: 1, transition: { type: "spring", stiffness: 110, damping: 22 } }}
-            exit={{ x: "100vw", opacity: 0, transition: { type: "spring", stiffness: 110, damping: 20 } }}
-            className="fixed inset-0 z-[100] bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl flex flex-col items-center justify-center"
+            initial={{ x: "100vw", opacity: 0, scale: 0.8 }}
+            animate={{ x: 0, opacity: 1, scale: 1, transition: { type: "spring", stiffness: 120, damping: 25, duration: 0.5 } }}
+            exit={{ x: "100vw", opacity: 0, scale: 0.8, transition: { type: "spring", stiffness: 100, damping: 20, duration: 0.4 } }}
+            className="fixed inset-0 z-[100] 
+                       bg-gradient-to-br from-red-100 via-yellow-100 to-green-100 
+                       backdrop-blur-xl flex flex-col items-center justify-center"
           >
             <motion.button
               onClick={() => setIsDrawerOpen(false)}
-              whileTap={{ scale: 0.96 }}
-              className="absolute top-7 right-7 p-2 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-200"
+              whileTap={{ scale: 0.9 }}
+              className="absolute top-7 right-7 p-3 text-red-600 hover:text-red-800 
+                         bg-white/90 rounded-full shadow-lg border border-red-400"
               aria-label="Close navigation menu"
             >
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"
                   d="M6 18L18 6M6 6l12 12" />
               </svg>
             </motion.button>
-            <ul className="flex flex-col gap-4 text-center">
+            <ul className="flex flex-col gap-6 text-center">
               {navItems.map(({ label, to }) => (
                 <motion.li
                   key={to}
@@ -321,11 +335,16 @@ function NavbarComponent() {
                       setIsDrawerOpen(false);
                     }}
                     className={`
-                      px-8 py-4 text-2xl font-semibold rounded-xl transition-all duration-150 bg-white/70 dark:bg-gray-900/70 shadow-xl
+                      px-7 py-3 text-2xl font-extrabold rounded-3xl transition-all duration-200 /* Slightly reduced padding and font size */
+                      bg-white/90 shadow-xl border-2
+                      whitespace-nowrap 
                       ${activeSection === to
-                        ? "text-blue-700 dark:text-blue-300 bg-white/90 dark:bg-gray-700/80 font-bold"
-                        : "text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-200"}
+                        ? "text-blue-700 bg-yellow-300/90 border-blue-500"
+                        : "text-gray-700 border-transparent hover:border-pink-400 hover:text-pink-600"}
                     `}
+                    style={{
+                      fontFamily: 'Bubblegum Sans, cursive'
+                    }}
                   >
                     {label}
                   </motion.button>
@@ -343,10 +362,10 @@ function NavbarComponent() {
 const Navbar = dynamic(() => Promise.resolve(NavbarComponent), {
   ssr: false,
   loading: () => (
-    <nav className="fixed top-0 z-50 w-full backdrop-blur-2xl bg-white/70 dark:bg-gray-900/80 shadow-2xl">
-      <div className="mx-auto flex items-center justify-between px-8 py-4 max-w-7xl relative z-10">
-        <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-blue-600 via-indigo-400 to-sky-400 text-transparent bg-clip-text drop-shadow-xl">
-          CHAINWORKS
+    <nav className="fixed top-0 z-50 w-full bg-gradient-to-r from-pink-200 via-yellow-200 to-blue-200 shadow-2xl">
+      <div className="mx-auto flex items-center justify-between px-8 py-3 max-w-7xl relative z-10">
+        <div className="text-3xl font-black tracking-wide bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 text-transparent bg-clip-text drop-shadow-xl">
+          GYANSOPAN
         </div>
       </div>
     </nav>

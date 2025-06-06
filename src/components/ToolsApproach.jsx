@@ -1,449 +1,388 @@
-"use client"; // Added for client-side rendering compatibility if using Next.js App Router
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Lottie from 'react-lottie';
-import { Dialog } from '@mui/material'; // Moved from Security component
-// import x{ X } from 'lucide-react'; // Moved from Security component
+"use client";
 
-// PDF imports - Moved from Security component
-// import pdfDisclaimer from '../attachments/disclaimer.pdf';
-// import pdfDatapolicy from '../attachments/datapolicy.pdf';
-// import pdfBlockchain from '../attachments/blockchain.pdf';
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
-// Dummy image data for demonstration, replace with actual imports or Gatsby query results
-const toolsImages = [
-  { id: '1', name: 'Quorum', src: '/tools-images/1_quorum_logo.png' },
-  { id: '2', name: 'Fabric', 'src': '/tools-images/2_fabric_logo.png' },
-  { id: '3', name: 'AWS', src: '/tools-images/3_aws_logo.png' },
-  { id: '4', name: 'IBM Cloud', src: '/tools-images/4_ibmcloud_logo.png' },
-  { id: '5', name: 'Serverless', src: '/tools-images/5_serverless_logo.png' },
-  { id: '6', name: 'Node.js', src: '/tools-images/6_nodejs_logo.png' },
-  { id: '7', name: 'React', src: '/tools-images/7_react_logo.png' },
-  { id: '8', name: 'Mongo', src: '/tools-images/8_mongo_logo.png' },
-  { id: '9', name: 'Gatsby', src: '/tools-images/9_gatsby_logo.png' },
-  { id: '10', name: 'GraphQL', src: '/tools-images/91_graphql_logo.png' },
-  { id: '11', name: 'Kubernetes', src: '/tools-images/92_kubernetes_logo.png' },
-  { id: '13', 'name': 'React Native', src: '/tools-images/95_reactnative_logo.png' },
-  { id: '14', 'name': 'Android', src: '/tools-images/96_android_logo.png' },
-];
+// Animated text component for letter-by-letter animation
+const AnimatedText = ({ text, className, delay = 0 }) => {
+  const letters = text.split("");
 
-// Define paths to your Lottie animation JSON files in the public directory
-const LOTTIE_ANIMATION_PATHS = {
-  analysis: "/lote-anime/tools/analysis.json",
-  development: "/lote-anime/tools/development.json",
-  iteration: "/lote-anime/tools/iterate.json",
-};
-
-const animationCardsInitialData = [
-  {
-    title: "Analysis",
-    description:
-      "We prioritize identifying the correct problem before attempting a solution. We collaborate with customers to understand systems, stakeholders, and define an initial development scope.",
-    animationPath: LOTTIE_ANIMATION_PATHS.analysis,
-  },
-  {
-    title: "Development",
-    description:
-      "Our expertise in development frameworks allows us to create scaffolding projects for feedback. This iterative process ensures better problem-solving.",
-    animationPath: LOTTIE_ANIMATION_PATHS.development,
-  },
-  {
-    title: "Iteration",
-    description:
-      "We design modular, extensible products that evolve with stakeholder feedback. Starting with a solid core, our solutions grow with incremental updates.",
-    animationPath: LOTTIE_ANIMATION_PATHS.iteration,
-  },
-];
-
-// // Data for Security section - Moved from Security component
-// const policies = [
-//   {
-//     key: 'PDFDATAPOLICY',
-//     label: 'Data Policy',
-//     file: pdfDatapolicy,
-//   },
-//   {
-//     key: 'PDFBLOCKCHAIN',
-//     label: 'Blockchain Policy',
-//     file: pdfBlockchain,
-//   },
-//   {
-//     key: 'PDFDISCLAIMER',
-//     label: 'Disclaimer',
-//     file: pdfDisclaimer,
-//   },
-// ];
-
-const points = [
-  'Data anonymization with single SPOC access.',
-  'Role-based DB access with expirations.',
-  'Industry-standard security practices using Snyk.',
-  'CERT-in audits for OWASP compliance.',
-  'HIPAA-compliant systems with SSO options.',
-  'Data stored in region-defined HIPAA-compliant databases.',
-];
-
-
-const NewApproachComponent = () => {
-  const [animationDataLoaded, setAnimationDataLoaded] = useState([]);
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
-
-  // State for Security section - Moved from Security component
-  const [open, setOpen] = useState(false);
-  const [currentPdf, setCurrentPdf] = useState(null);
-
-  // Function for Security section - Moved from Security component
-  const openPdf = (file) => {
-    setCurrentPdf(file);
-    setOpen(true);
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-
-      const handleResize = () => {
-        setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-      };
-
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchLottieData = async () => {
-      const loadedData = await Promise.all(
-        animationCardsInitialData.map(async (card) => {
-          try {
-            const response = await fetch(card.animationPath);
-            if (!response.ok) {
-              throw new Error(`Failed to fetch ${card.animationPath}: ${response.statusText}`);
-            }
-            const data = await response.json();
-            return { ...card, animationData: data };
-          } catch (error) {
-            console.error("Error loading Lottie animation:", error);
-            return { ...card, animationData: null };
-          }
-        })
-      );
-      setAnimationDataLoaded(loadedData);
-    };
-
-    fetchLottieData();
-  }, []);
-
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
+  const container = {
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-        staggerChildren: 0.1,
-      },
+      transition: { staggerChildren: 0.04, delayChildren: delay },
     },
   };
 
-  const itemChildVariants = {
-    hidden: { opacity: 0, y: 30 },
+  const child = {
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         type: "spring",
-        stiffness: 80,
-        damping: 12,
-        duration: 0.5,
+        damping: 7,
+        stiffness: 140,
       },
     },
-  };
-
-
-  const card3DVariants = {
-    initial: {
-      rotateY: 0,
-      rotateX: 0,
-      scale: 1,
-      boxShadow: "0 8px 16px rgba(0, 255, 0, 0.1)",
-      y: 0,
-    },
-    hover: {
-      scale: 1.1,
-      rotateY: [0, 10, -10, 0],
-      rotateX: [0, -10, 10, 0],
-      y: -10,
-      boxShadow: "0 30px 60px rgba(0, 255, 0, 0.6)",
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-        yoyo: 1,
-        boxShadow: {
-          duration: 0.3,
-        }
-      },
-    },
-  };
-
-  const text3DVariants = {
-    initial: {
-      textShadow: "2px 2px #0f0",
-      y: 0,
-    },
-    hover: {
-      textShadow: [
-        "2px 2px #0f0",
-        "5px 5px #0f0",
-        "10px 10px #0f0",
-        "5px 5px #0f0",
-        "2px 2px #0f0",
-      ],
-      y: [0, -5, 0, 5, 0],
-      transition: {
-        duration: 0.8,
-        ease: "easeInOut",
-        repeat: Infinity,
-      },
-    },
-  };
-
-  const lottieOptions = (animationData) => ({
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  });
-
-  const toolBgColors = [
-    "bg-gray-100", "bg-blue-100", "bg-indigo-100", "bg-purple-100",
-    "bg-pink-100", "bg-yellow-100", "bg-green-100", "bg-red-100",
-    "bg-gray-200", "bg-blue-200", "bg-indigo-200", "bg-purple-200",
-    "bg-pink-200", "bg-yellow-200",
-  ];
-
-  const bubbleVariants = {
-    initial: (i) => ({
+    hidden: {
       opacity: 0,
-      scale: 0,
-      x: windowDimensions.width ? windowDimensions.width * Math.random() : Math.random() * 1000,
-      y: windowDimensions.height ? windowDimensions.height + Math.random() * 50 : 1000 + Math.random() * 50,
-      filter: `blur(${Math.random() * 2}px)`,
-    }),
-    animate: (i) => ({
-      opacity: [0.05 + Math.random() * 0.05, 0.1 + Math.random() * 0.1, 0.05 + Math.random() * 0.05],
-      scale: [0.1 + Math.random() * 0.1, 0.5 + Math.random() * 0.5, 0.1 + Math.random() * 0.1],
-      y: -50,
-      x: `+=${Math.random() * 200 - 100}`,
+      y: 20,
       transition: {
-        duration: 8 + Math.random() * 10,
-        ease: "linear",
-        repeat: Infinity,
-        delay: Math.random() * 5,
+        type: "spring",
+        damping: 7,
+        stiffness: 140,
       },
-    }),
+    },
   };
-
-  const numberOfBubbles = 30;
-
-  const bubbleColors = [
-    "rgba(0, 255, 0, 0.08)",
-    "rgba(0, 255, 0, 0.1)",
-    "rgba(0, 200, 0, 0.08)",
-    "rgba(0, 150, 255, 0.08)",
-    "rgba(0, 100, 255, 0.1)",
-    "rgba(50, 200, 255, 0.08)",
-  ];
-
-  const bubbleShadowColors = [
-    "rgba(0, 255, 0, 0.3)",
-    "rgba(0, 200, 255, 0.3)",
-  ];
 
   return (
-    <motion.section
-      id="tools-approach"
+    <motion.div
+      className={`${className}`}
+      variants={container}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={sectionVariants}
-      className="relative w-full pt-32 pb-16 px-4 md:px-8 overflow-hidden min-h-screen
-                 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900 
-                 animate-background-shift"
+      animate="visible"
     >
-      {/* Animated Bubbles (using Framer Motion for each bubble) */}
-      {windowDimensions.width > 0 && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          {Array.from({ length: numberOfBubbles }).map((_, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={bubbleVariants}
-              initial="initial"
-              animate="animate"
-              className="absolute rounded-full"
-              style={{
-                width: `${5 + Math.random() * 15}px`,
-                height: `${5 + Math.random() * 15}px`,
-                backgroundColor: bubbleColors[Math.floor(Math.random() * bubbleColors.length)],
-                boxShadow: `0 0 ${10 + Math.random() * 20}px ${bubbleShadowColors[Math.floor(Math.random() * bubbleShadowColors.length)]}`,
-              }}
-            />
-          ))}
-        </div>
-      )}
-      
-      {/* Content */}
-      <div className="relative z-10">
-        <motion.h2
-          className="mb-6 text-center text-5xl md:text-6xl mt-6 font-extrabold uppercase tracking-widest text-green-700 drop-shadow-lg"
-          variants={itemChildVariants}
-          whileHover="hover"
-          style={{ perspective: "1000px"  }}
+      {letters.map((letter, index) => (
+        <motion.span
+          variants={child}
+          key={index}
+          className="inline-block"
+          whileHover={{
+            scale: 1.5,
+            color: "#ff77a9",
+            textShadow: "0 0 12px rgba(255, 119, 169, 0.8)",
+            transition: { duration: 0.1 },
+          }}
         >
-          <motion.span variants={text3DVariants}>
-            Tools & Approach
-          </motion.span>
-        </motion.h2>
-
-        <motion.p
-          className="mb-16 text-center text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed px-4 md:px-0"
-          variants={itemChildVariants}
-        >
-          True to Agile methodology, we build solutions that tackle core business problems and evolve based on stakeholder feedback. Our approach is three-pronged:
-        </motion.p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 justify-center mb-24 max-w-7xl mx-auto">
-          {animationDataLoaded.map((card, index) => (
-            <motion.div
-              key={index}
-              className="flex flex-col h-full perspective-1000"
-              variants={itemChildVariants}
-            >
-              <motion.div
-                className="relative rounded-2xl shadow-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out bg-white border border-green-300 group"
-                initial="initial"
-                whileHover="hover"
-                variants={card3DVariants}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-blue-50 opacity-90 rounded-2xl"></div>
-
-                <div className="relative p-8 text-gray-900 flex flex-col items-center h-full">
-                  <motion.div
-                    className="mb-6"
-                    initial={{ rotateY: 90, opacity: 0 }}
-                    animate={{ rotateY: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
-                  >
-                    <div className="w-40 h-40 bg-green-200 bg-opacity-70 rounded-full flex items-center justify-center p-4 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
-                      {card.animationData && (
-                        <Lottie
-                          options={lottieOptions(card.animationData)}
-                          height={150}
-                          width={150}
-                        />
-                      )}
-                      {!card.animationData && (
-                          <p className="text-sm text-red-600">Loading...</p>
-                      )}
-                    </div>
-                  </motion.div>
-                  <h3 className="text-3xl font-bold mb-4 text-center text-green-700 drop-shadow-md transform transition-transform duration-300 group-hover:scale-105">
-                    {card.title}
-                  </h3>
-                  <p className="text-lg text-center leading-relaxed text-gray-700 px-2">
-                    {card.description}
-                  </p>
-                </div>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.p
-          className="mt-20 mb-12 text-center text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed px-4 md:px-0"
-          variants={itemChildVariants}
-        >
-          We bring expertise from diverse platforms to provide optimal solutions in terms of features, pricing, and security. Here are some tools and frameworks we specialize in:
-        </motion.p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-6 lg:gap-8 items-center justify-center max-w-7xl mx-auto">
-          {toolsImages.map((image, index) => (
-            <motion.div
-              key={image.id}
-              className={`flex items-center justify-center p-6 rounded-xl shadow-lg border border-green-300 ${toolBgColors[index % toolBgColors.length]}`}
-              variants={itemChildVariants}
-              whileHover={{ 
-                scale: 1.15, 
-                rotate: 5, 
-                boxShadow: "0 10px 25px rgba(0, 255, 0, 0.4)",
-                transition: { duration: 0.3 }
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            >
-              <img
-                src={image.src}
-                alt={image.name}
-                className="max-h-20 w-auto object-contain transition-all duration-300 ease-in-out"
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* --- Data Protection & Security Section --- */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }} 
-          className="w-full px-6 py-12 max-w-5xl mx-auto mt-24" // Added margin-top for separation
-        >
-          <h2 className="text-3xl font-bold text-blue-600 mb-8 font-serif">Data Protection & Security</h2>
-
-          <div className="bg-gradient-to-br from-pink-300 to-blue-200 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center">
-            <div className="text-blue-500 text-6xl mb-4 md:mb-0 md:mr-8">
-              <i className="mdi mdi-shield-lock-outline" />
-            </div>
-            <div>
-              <p className="text-gray-700 text-base font-medium mb-4">
-                We follow strict data security practices and work with clients to meet internal standards.
-              </p>
-              <ul className="space-y-2 list-decimal list-inside text-gray-800 text-sm">
-                {points.map((text, index) => (
-                  <li key={index}>{text}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* <div className="mt-6 flex flex-wrap gap-4">
-            {policies.map(({ key, label, file }) => (
-              <button
-                key={key}
-                onClick={() => openPdf(file)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all"
-              >
-                {label}
-              </button>
-            ))}
-          </div> */}
-
-          <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth>
-            <div className="relative w-full h-[80vh]">
-         
-              <iframe
-                title="policy-pdf"
-                src={`${currentPdf}#toolbar=0&view=FitH`}
-                className="w-full h-full border-none"
-              />
-            </div>
-          </Dialog>
-        </motion.div>
-      </div>
-    </motion.section>
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.div>
   );
 };
 
-export default NewApproachComponent;
+// Floating particles component with optimized performance
+const FloatingParticles = () => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const particleCount =
+    typeof window !== "undefined" && window.innerWidth < 768 ? 15 : 30;
+  const particles = Array.from({ length: particleCount }, (_, i) => i);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  if (dimensions.width === 0) return null;
+
+  const colors = [
+    "from-pink-300 to-rose-400",
+    "from-yellow-300 to-amber-400",
+    "from-blue-300 to-sky-400",
+    "from-green-300 to-lime-400",
+    "from-purple-300 to-violet-400",
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle}
+          className={`absolute w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r ${colors[particle % colors.length]} rounded-full opacity-70`}
+          initial={{
+            x: Math.random() * dimensions.width,
+            y: Math.random() * dimensions.height,
+            scale: Math.random() * 0.8 + 0.5,
+          }}
+          animate={{
+            y: [null, -150, null],
+            x: [null, Math.random() * 50 - 25, null],
+            scale: [1, 1.5, 1],
+            opacity: [0.7, 1, 0.7],
+          }}
+          transition={{
+            duration: Math.random() * 4 + 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: Math.random() * 2,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// 3D Card component with optimized performance
+const Card3D = ({ children, className = "" }) => {
+  const ref = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
+
+    setMousePosition({ x: rotateY, y: rotateX });
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`transform-gpu perspective-1000 ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setMousePosition({ x: 0, y: 0 });
+      }}
+      animate={{
+        rotateX: isHovered ? mousePosition.y : 0,
+        rotateY: isHovered ? mousePosition.x : 0,
+        scale: isHovered ? 1.05 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      style={{
+        transformStyle: "preserve-3d",
+      }}
+    >
+      <motion.div
+        className="relative"
+        animate={{
+          z: isHovered ? 30 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// Floating Letter component (restored original cool effect)
+const FloatingLetter = ({ letter, className, delay = 0, duration = 5 }) => (
+  <motion.div
+    className={`${className} absolute text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 opacity-60 filter blur-[1.5px] pointer-events-none`}
+    initial={{ opacity: 0, y: 0, scale: 0.8 }}
+    animate={{
+      opacity: [0.6, 0.9, 0.6],
+      y: [0, -20, 0],
+      scale: [0.9, 1.1, 0.9],
+      rotate: [0, 5, -5, 0],
+    }}
+    transition={{
+      delay,
+      duration: duration + Math.random() * 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+    }}
+  >
+    {letter}
+  </motion.div>
+);
+
+// Shape components (restored original effects)
+const SemiCircleArc = ({ className, delay = 0, duration = 3 }) => (
+  <motion.div
+    className={`${className} w-10 h-5 sm:w-16 sm:h-8 rounded-t-full border-4 border-b-0`}
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: 1, rotate: [0, 360, 0] }}
+    transition={{ delay, duration, repeat: Infinity, ease: "linear" }}
+  />
+);
+
+const RightTriangle = ({ className, delay = 0, duration = 4 }) => (
+  <motion.div
+    className={`${className} w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-300 to-orange-400 clip-path-[polygon(0%_100%,_100%_100%,_100%_0%)] opacity-70`}
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: [1, 1.1, 1], rotate: [0, -15, 0] }}
+    transition={{ delay, duration, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
+const SparkleShape = ({ className, delay = 0, duration = 2.5 }) => (
+  <motion.div
+    className={`${className} w-6 h-6 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-300 to-sky-400 rounded-full opacity-80`}
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: 1, scale: [1, 1.2, 1], rotate: [0, 90, 180, 270, 360] }}
+    transition={{ delay, duration, repeat: Infinity, ease: "linear" }}
+  />
+);
+
+export default function AboutUsSection() {
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleMouseMove = (e) => {
+    if (isMobile || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePosition({
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    });
+  };
+
+  return (
+    <motion.section
+      ref={containerRef}
+      id="about-us"
+      className="relative flex flex-col items-center justify-center py-8 sm:py-12 lg:py-16 overflow-hidden"
+      onMouseMove={handleMouseMove}
+      style={{
+        background: isMobile
+          ? `linear-gradient(135deg, #fff3e0 0%, #e0f7fa 50%, #fce4ec 100%)`
+          : `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
+              rgba(255, 223, 186, 0.3) 0%,
+              rgba(255, 192, 203, 0.3) 20%,
+              rgba(173, 216, 230, 0.3) 40%,
+              transparent 70%),
+              linear-gradient(135deg, 
+              #ffe4e6 0%, 
+              #d4f4e4 25%, 
+              #fefcbf 50%, 
+              #e0f2fe 100%)`,
+      }}
+    >
+      {/* Background Particles */}
+      <FloatingParticles />
+
+      {/* Floating Letters and Shapes (hidden on mobile for performance) */}
+      {!isMobile && (
+        <>
+          {/* Top Left Group */}
+          <FloatingLetter letter="A" className="top-[10%] left-[5%]" delay={0.5} />
+          <FloatingLetter letter="B" className="top-[15%] left-[12%]" delay={1.2} />
+          <SemiCircleArc className="top-[8%] left-[18%] border-pink-400" delay={0.8} />
+          <FloatingLetter letter="F" className="top-[20%] left-[2%]" delay={2.1} />
+          <FloatingLetter letter="G" className="top-[25%] left-[10%]" delay={1.7} />
+
+          {/* Top Right Group */}
+          <FloatingLetter letter="C" className="top-[8%] right-[5%]" delay={0.7} />
+          <FloatingLetter letter="Q" className="top-[15%] right-[10%]" delay={1.5} />
+          <SemiCircleArc className="top-[12%] right-[18%] border-green-400 rotate-180" delay={1.1} />
+          <FloatingLetter letter="R" className="top-[20%] right-[3%]" delay={2.3} />
+          <FloatingLetter letter="M" className="top-[25%] right-[12%]" delay={1.9} />
+
+          {/* Middle "Exploring" area shapes */}
+          <FloatingLetter letter="N" className="top-1/2 left-[5%] -translate-y-1/2" delay={0.3} />
+          <RightTriangle className="top-1/2 left-[10%] -translate-y-1/2" delay={0.9} />
+          <SparkleShape className="top-[45%] right-[8%]" delay={1.4} />
+
+          {/* Bottom Group */}
+          <FloatingLetter letter="P" className="bottom-[10%] left-[8%]" delay={0.6} />
+          <SemiCircleArc className="bottom-[15%] left-[15%] border-blue-400" delay={1.0} />
+          <FloatingLetter letter="N" className="bottom-[5%] left-[2%]" delay={2.0} />
+          <FloatingLetter letter="B" className="bottom-[18%] left-[20%]" delay={0.9} />
+          <SemiCircleArc className="bottom-[8%] right-[10%] border-yellow-400 rotate-90" delay={0.4} />
+          <FloatingLetter letter="F" className="bottom-[22%] right-[15%]" delay={1.8} />
+          <FloatingLetter letter="G" className="bottom-[10%] right-[5%]" delay={2.5} />
+          <FloatingLetter letter="R" className="bottom-[5%] right-[18%]" delay={0.7} />
+          <FloatingLetter letter="A" className="bottom-[12%] right-[2%]" delay={1.3} />
+          <FloatingLetter letter="M" className="bottom-[16%] left-[25%]" delay={2.2} />
+          <FloatingLetter letter="C" className="bottom-[20%] left-[10%]" delay={1.6} />
+          <FloatingLetter letter="Q" className="bottom-[3%] left-[12%]" delay={0.9} />
+          <SparkleShape className="bottom-[20%] right-[5%]" delay={0.2} />
+        </>
+      )}
+
+      {/* Main Content */}
+      <div className="flex flex-col w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10 space-y-6">
+        {/* Section Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="text-center"
+        >
+          <AnimatedText
+            text="About Us"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-4"
+            delay={0.5}
+          />
+        </motion.div>
+
+        {/* Main Quote Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="w-full max-w-2xl mx-auto"
+        >
+          <Card3D className="w-full">
+            <div className="p-8 rounded-2xl bg-white/90 backdrop-blur-md ring-1 ring-gray-200 hover:ring-gray-300 transition-all shadow-lg hover:shadow-xl">
+              <AnimatedText
+                text="Exploring new avenues in academia benefits both teachers and students. Embracing novelty nurtures creativity, adaptability, and growth for everyone involved, enriching the educational experience overall."
+                className="text-base sm:text-lg lg:text-xl font-medium text-gray-800 leading-relaxed italic whitespace-normal"
+                delay={1.0}
+              />
+            </div>
+          </Card3D>
+        </motion.div>
+
+        {/* Mission Statements */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="bg-white/90 backdrop-blur-sm p-6 rounded-xl ring-1 ring-gray-200 hover:ring-gray-300 transition-all shadow-sm hover:shadow-md"
+          >
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Our Origin</h3>
+            <p className="text-gray-700 leading-relaxed whitespace-normal">
+              GyanSopan was created by graduates from IIT Bombay with the initial purpose of supporting Olympiad Mathematics teachers and students.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.3 }}
+            className="bg-white/90 backdrop-blur-sm p-6 rounded-xl ring-1 ring-gray-200 hover:ring-gray-300 transition-all shadow-sm hover:shadow-md"
+          >
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Our Expansion</h3>
+            <p className="text-gray-700 leading-relaxed whitespace-normal">
+              The program has now broadened its scope to provide affordable assistance to all users on the platform.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.6 }}
+            className="bg-white/90 backdrop-blur-sm p-6 rounded-xl ring-1 ring-gray-200 hover:ring-gray-300 transition-all shadow-sm hover:shadow-md"
+          >
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Our Impact</h3>
+            <p className="text-gray-700 leading-relaxed whitespace-normal">
+              The collaboration between teachers and students enhances learning and plays a vital role in our nation's progress.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
