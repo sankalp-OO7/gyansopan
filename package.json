@@ -34,9 +34,11 @@
     "react-icons": "^5.5.0",
     "react-lottie": "^1.2.10",
     "react-markdown": "^10.1.0",
+    "react-tsparticles": "^2.12.2",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "tailwindcss-animate": "^1.0.7",
+    "tsparticles": "^3.8.1",
     "zoom": "^0.0.3"
   },
   "devDependencies": {

@@ -6,13 +6,15 @@ import dynamic from "next/dynamic";
 // --- Nav items (Original names maintained) ---
 const navItems = [
   { label: 'Use?', to: 'about-us' },
-  { label: 'Features', to: 'why-choose-us' },
-  { label: 'Trademark', to: 'projects' },
   { label: 'About Us', to: 'tools-approach' },
+  { label: 'Features', to: 'why-choose-us' },
+  { label: 'Pricing', to: 'pricing' },
+  { label: 'Jee', to: 'jee' },
+  { label: 'Olympiad', to: 'olympiad' },
+  { label: 'Scholorship', to: 'scholorship' },
   { label: 'Contact', to: 'team' },
-  // { label: 'Awards', to: 'awards' },
-  // { label: 'Career', to: 'career' },
-  // { label: 'Contact', to: 'contact-us' },
+
+ 
 ];
 
 // --- Utility: Smooth scroll ---

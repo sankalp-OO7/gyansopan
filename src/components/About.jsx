@@ -173,7 +173,7 @@ const Card3D = ({ children, className = "" }) => {
   );
 };
 
-// Floating Letter component (restored original cool effect)
+// Floating Letter component
 const FloatingLetter = ({ letter, className, delay = 0, duration = 5 }) => (
   <motion.div
     className={`${className} absolute text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 opacity-60 filter blur-[1.5px] pointer-events-none`}
@@ -195,7 +195,7 @@ const FloatingLetter = ({ letter, className, delay = 0, duration = 5 }) => (
   </motion.div>
 );
 
-// Shape components (restored original effects)
+// Shape components
 const SemiCircleArc = ({ className, delay = 0, duration = 3 }) => (
   <motion.div
     className={`${className} w-10 h-5 sm:w-16 sm:h-8 rounded-t-full border-4 border-b-0`}
@@ -256,76 +256,114 @@ export default function AboutUsSection() {
       style={{
         background: isMobile
           ? `linear-gradient(135deg, #fff3e0 0%, #e0f7fa 50%, #fce4ec 100%)`
-          : `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
-              rgba(255, 223, 186, 0.3) 0%,
-              rgba(255, 192, 203, 0.3) 20%,
-              rgba(173, 216, 230, 0.3) 40%,
-              transparent 70%),
-              linear-gradient(135deg, 
-              #ffe4e6 0%, 
-              #d4f4e4 25%, 
-              #fefcbf 50%, 
-              #e0f2fe 100%)`,
+          : `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(255, 223, 186, 0.3) 0%, rgba(255, 192, 203, 0.3) 20%, rgba(173, 216, 230, 0.3) 40%, transparent 70%), linear-gradient(135deg, #ffe4e6 0%, #d4f4e4 25%, #fefcbf 50%, #e0f2fe 100%)`,
       }}
     >
+      <style jsx>{`
+        .fancy-title {
+          position: relative;
+          font-family: 'Playfair Display', serif;
+          font-weight: 900;
+          background: linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          text-shadow: 0 0 15px rgba(236, 72, 153, 0.5), 0 0 30px rgba(139, 92, 246, 0.3);
+          line-height: 1.2;
+        }
+        .fancy-title::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(to right, #ec4899, #3b82f6);
+          border-radius: 2px;
+        }
+        .sparkle {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+          border-radius: 50%;
+          pointer-events: none;
+          animation: sparkle 1.5s infinite;
+        }
+        .sparkle-1 { top: -10px; left: 10%; animation-delay: 0s; }
+        .sparkle-2 { top: 0; right: 15%; animation-delay: 0.5s; }
+        .sparkle-3 { bottom: -20px; left: 20%; animation-delay: 1s; }
+        @keyframes sparkle {
+          0%, 100% { transform: scale(0); opacity: 0; }
+          50% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
+
       {/* Background Particles */}
       <FloatingParticles />
 
       {/* Floating Letters and Shapes (hidden on mobile for performance) */}
       {!isMobile && (
         <>
-          {/* Top Left Group */}
           <FloatingLetter letter="A" className="top-[10%] left-[5%]" delay={0.5} />
           <FloatingLetter letter="B" className="top-[15%] left-[12%]" delay={1.2} />
-          <SemiCircleArc className="top-[8%] left-[18%] border-pink-400" delay={0.8} />
-          <FloatingLetter letter="F" className="top-[20%] left-[2%]" delay={2.1} />
+           <FloatingLetter letter="F" className="top-[20%] left-[2%]" delay={2.1} />
           <FloatingLetter letter="G" className="top-[25%] left-[10%]" delay={1.7} />
-
-          {/* Top Right Group */}
           <FloatingLetter letter="C" className="top-[8%] right-[5%]" delay={0.7} />
           <FloatingLetter letter="Q" className="top-[15%] right-[10%]" delay={1.5} />
-          <SemiCircleArc className="top-[12%] right-[18%] border-green-400 rotate-180" delay={1.1} />
-          <FloatingLetter letter="R" className="top-[20%] right-[3%]" delay={2.3} />
+           <FloatingLetter letter="R" className="top-[20%] right-[3%]" delay={2.3} />
           <FloatingLetter letter="M" className="top-[25%] right-[12%]" delay={1.9} />
-
-          {/* Middle "Exploring" area shapes */}
           <FloatingLetter letter="N" className="top-1/2 left-[5%] -translate-y-1/2" delay={0.3} />
           <RightTriangle className="top-1/2 left-[10%] -translate-y-1/2" delay={0.9} />
-          <SparkleShape className="top-[45%] right-[8%]" delay={1.4} />
-
-          {/* Bottom Group */}
-          <FloatingLetter letter="P" className="bottom-[10%] left-[8%]" delay={0.6} />
-          <SemiCircleArc className="bottom-[15%] left-[15%] border-blue-400" delay={1.0} />
-          <FloatingLetter letter="N" className="bottom-[5%] left-[2%]" delay={2.0} />
+           <FloatingLetter letter="P" className="bottom-[10%] left-[8%]" delay={0.6} />
+           <FloatingLetter letter="N" className="bottom-[5%] left-[2%]" delay={2.0} />
           <FloatingLetter letter="B" className="bottom-[18%] left-[20%]" delay={0.9} />
-          <SemiCircleArc className="bottom-[8%] right-[10%] border-yellow-400 rotate-90" delay={0.4} />
-          <FloatingLetter letter="F" className="bottom-[22%] right-[15%]" delay={1.8} />
+           <FloatingLetter letter="F" className="bottom-[22%] right-[15%]" delay={1.8} />
           <FloatingLetter letter="G" className="bottom-[10%] right-[5%]" delay={2.5} />
           <FloatingLetter letter="R" className="bottom-[5%] right-[18%]" delay={0.7} />
           <FloatingLetter letter="A" className="bottom-[12%] right-[2%]" delay={1.3} />
           <FloatingLetter letter="M" className="bottom-[16%] left-[25%]" delay={2.2} />
           <FloatingLetter letter="C" className="bottom-[20%] left-[10%]" delay={1.6} />
           <FloatingLetter letter="Q" className="bottom-[3%] left-[12%]" delay={0.9} />
-          <SparkleShape className="bottom-[20%] right-[5%]" delay={0.2} />
-        </>
+         </>
       )}
 
       {/* Main Content */}
       <div className="flex flex-col w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10 space-y-6">
         {/* Section Title */}
+        <div className="text-center relative">
+          <h1 className="fancy-title text-4xl sm:text-5xl lg:text-6xl">
+            About Us
+            <span className="sparkle sparkle-1"></span>
+            <span className="sparkle sparkle-2"></span>
+            <span className="sparkle sparkle-3"></span>
+          </h1>
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-center"
+          transition={{ duration: 0.8, delay: 1.9 }}
+          className="w-full max-w-2xl mx-auto mt-8"
         >
-          <AnimatedText
-            text="About Us"
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-4"
-            delay={0.5}
-          />
+          <Card3D className="w-full">
+            <div className="p-8 rounded-2xl bg-white/90 backdrop-blur-md ring-1 ring-gray-200 hover:ring-gray-300 transition-all shadow-lg hover:shadow-xl">
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <img
+                  src="/jiten-sir.png"
+                  alt="Jitendra Sadangi, CEO"
+                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-blue-300"
+                />
+                <div className="text-center sm:text-left">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Meet Our CEO</h3>
+                  <p className="text-gray-700 leading-relaxed whitespace-normal">
+                    Jitendra Sadangi, an esteemed IIT Bombay alumnus, leads GyanSopan with over 10 years of experience. He served as an invigilator for the International Mathematics Olympiad UK 2024 and holds an impressive IIT JAM AIR 7 rank. In February 2023, he was honored with the Most Prominent Contributors to Innovation Award by the World Innovation Congress, recognizing his significant contributions to educational innovation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card3D>
         </motion.div>
-
         {/* Main Quote Card */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -382,6 +420,9 @@ export default function AboutUsSection() {
             </p>
           </motion.div>
         </div>
+
+        {/* CEO Section */}
+       
       </div>
     </motion.section>
   );

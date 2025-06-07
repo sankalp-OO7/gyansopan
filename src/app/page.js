@@ -7,12 +7,15 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
-import AboutUs from '@/components/AboutUs'
+import AboutUs from '@/components/Use'
 import Projects from '@/components/Projects'
-import ToolsApproach from '@/components/ToolsApproach'
-import Team from '@/components/Team'
- 
-import WhyChooseUs from '@/components/WhyChooseUs'
+import ToolsApproach from '@/components/About'
+import Team from '@/components/Contact'
+import Pricing from '@/components/Pricing'
+import Jee from '@/components/Jee'
+import Olympiad from '@/components/Olympiad'
+import Scholorship from '@/components/Scholorship'
+import WhyChooseUs from '@/components/Features'
 
 // --- Animation Variants ---
 
@@ -174,6 +177,7 @@ export default function Home() {
             <HeroSection />
           </motion.section>
 
+
           <motion.section
             id="about-us"
             variants={sectionSlideIn}
@@ -184,6 +188,15 @@ export default function Home() {
             <AboutUs />
           </motion.section>
           <motion.section
+            id="tools-approach"
+            variants={sectionSlideIn}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.4 } : { duration: 0 }}
+          >
+            <ToolsApproach />
+          </motion.section>
+          <motion.section
             id="why-choose-us"
             variants={sectionSlideIn}
             initial={!animationPlayedThisSession ? "hidden" : "visible"}
@@ -192,6 +205,7 @@ export default function Home() {
           >
             <WhyChooseUs />
           </motion.section>
+ 
           <motion.section
             id="projects"
             variants={sectionSlideIn}
@@ -202,17 +216,42 @@ export default function Home() {
             <Projects />
           </motion.section>
 
-          <motion.section
-            id="tools-approach"
+ 
+
+        <motion.section
+            id="pricing"
             variants={sectionSlideIn}
             initial={!animationPlayedThisSession ? "hidden" : "visible"}
             animate="visible"
-            transition={!animationPlayedThisSession ? { delay: 0.4 } : { duration: 0 }}
+            transition={!animationPlayedThisSession ? { delay: 0.5 } : { duration: 0 }}
           >
-            <ToolsApproach />
+            <Pricing />
+          </motion.section>          <motion.section
+            id="jee"
+            variants={sectionSlideIn}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.5 } : { duration: 0 }}
+          >
+            <Jee />
+          </motion.section>          <motion.section
+            id="olympiad"
+            variants={sectionSlideIn}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.5 } : { duration: 0 }}
+          >
+            <Olympiad />
           </motion.section>
-
           <motion.section
+            id="scholorship"
+            variants={sectionSlideIn}
+            initial={!animationPlayedThisSession ? "hidden" : "visible"}
+            animate="visible"
+            transition={!animationPlayedThisSession ? { delay: 0.5 } : { duration: 0 }}
+          >
+            <Scholorship />
+          </motion.section>         <motion.section
             id="team"
             variants={sectionSlideIn}
             initial={!animationPlayedThisSession ? "hidden" : "visible"}
@@ -221,7 +260,6 @@ export default function Home() {
           >
             <Team />
           </motion.section>
- 
         </main>
         <Footer />
       </motion.div>
