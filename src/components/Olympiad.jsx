@@ -123,7 +123,7 @@ export default function OlympiadPage() {
       </section>
 
       {/* Journey to Gold Section */}
-      <section className="py-20 px-6 md:px-12 bg-gradient-to-l from-indigo-500 to-violet-700 text-white text-center">
+      {/* <section className="py-20 px-6 md:px-12 bg-gradient-to-l from-indigo-500 to-violet-700 text-white text-center">
         <h2 className="text-4xl md:text-5xl font-bold mb-12 font-quicksand drop-shadow">
           Your Journey to Olympiad Gold 🏅
         </h2>
@@ -139,7 +139,7 @@ export default function OlympiadPage() {
             <h3 className="text-xl font-bold font-quicksand">Diagnose</h3>
             <p className="text-sm opacity-90">Find your core strengths & weaknesses.</p>
           </motion.div>
-          <div className="text-white text-6xl md:text-8xl flex-shrink-0 animate-pulse hidden md:block">→</div> {/* Arrow animation */}
+          <div className="text-white text-6xl md:text-8xl flex-shrink-0 animate-pulse hidden md:block">→</div>  
           <motion.div variants={rotateInVariants} className="flex flex-col items-center p-6 bg-white bg-opacity-20 rounded-full w-48 h-48 justify-center text-center shadow-xl delay-100">
             <div className="text-7xl mb-2">📚</div>
             <h3 className="text-xl font-bold font-quicksand">Master</h3>
@@ -158,7 +158,7 @@ export default function OlympiadPage() {
             <p className="text-sm opacity-90">Dominate mock Olympiads & achieve top ranks!</p>
           </motion.div>
         </motion.div>
-      </section>
+      </section> */}
 
       {/* Call to Action - Join the League of Champions */}
       <section className="bg-gradient-to-r from-pink-400 to-orange-500 py-20 px-6 md:px-12 text-center text-white">

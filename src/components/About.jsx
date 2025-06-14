@@ -355,7 +355,7 @@ export default function AboutUsSection() {
                   className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-blue-300"
                 />
                 <div className="text-center sm:text-left">
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Meet Our CEO</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Meet Our Founder</h3>
                   <p className="text-gray-700 leading-relaxed whitespace-normal">
                     Jitendra Sadangi, an esteemed IIT Bombay alumnus, leads GyanSopan with over 10 years of experience. He served as an invigilator for the International Mathematics Olympiad UK 2024 and holds an impressive IIT JAM AIR 7 rank. In February 2023, he was honored with the Most Prominent Contributors to Innovation Award by the World Innovation Congress, recognizing his significant contributions to educational innovation.
                   </p>

@@ -213,8 +213,7 @@ export default function ContactUsSection() {
 
         {/* Links Section */}
         <div className="flex flex-col lg:flex-row justify-center gap-6 sm:gap-8 max-w-5xl mx-auto w-full">
-          {/* Policy Links */}
-          <motion.div
+           {/* <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.2 }}
@@ -253,10 +252,10 @@ export default function ContactUsSection() {
                 </a>
               </li>
             </ul>
-          </motion.div>
+          </motion.div> */}
 
           {/* FAQs & Brochure */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.5 }}
@@ -285,7 +284,7 @@ export default function ContactUsSection() {
                 </a>
               </li>
             </ul>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </motion.section>

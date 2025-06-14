@@ -154,7 +154,7 @@ export default function Footer() {
             className="text-sm sm:text-base font-medium tracking-wide"
             variants={copyrightVariants}
           >
-            © {currentYear} GyanSopan. All rights reserved.
+            © {currentYear} Finlei GyanSopan. All rights reserved.
           </motion.span>
         </div>
       </div>
